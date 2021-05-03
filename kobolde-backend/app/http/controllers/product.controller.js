@@ -10,6 +10,7 @@ module.exports = {
   create,
   update,
   remove,
+  getByCategoryId,
 };
 
 async function getAll(req, res) {
@@ -28,30 +29,18 @@ async function getAll(req, res) {
     });
   });
 }
-
-async function getById(req, res) {
+async function getByCategoryId(req, res) {
   let categoryId=req.params["id"];
-  let product=await (await productModel.findOne({category:categoryId}));
+  let product=await (await productModel.find({category:categoryId}));
   if(!product)
     return res.status(400).json({message:"product is not Found"});
     if (product) {
       return res.status(200).json(product);
     }
-  /*(await categoryModel.findById(req.params.id)) => {
-    if (err) {
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-    if (category) {
-      return res.status(200).json(category);
-    }
-    res.json({
-      message: "موردی جهت نمایش وجود ندارد",
-      success: false,
-    });
-  });*/
 }
 
-/*async function getById(req, res) {
+
+async function getById(req, res) {
   productModel.findById(req.params.id).exec((err, user) => {
     if (err) {
       res.status(500).json({
@@ -67,7 +56,7 @@ async function getById(req, res) {
     });
   });
 }
-*/
+
 
 async function create(req, res) {
   let categoryId = req.params["id"];
