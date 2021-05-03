@@ -118,17 +118,22 @@ export default function Product(props) {
   }
 
   const searchrow=()=>{  
-    alert(categoryId);
+   // alert(categoryId);
     
-    axios.get(`http://localhost:8000/api/v1/admin/product/${categoryId}`).then(res=> {
-     alert("record exist");
-     const products = setProductItem(products.filter(item => item.categoryId == res.data.product.categoryId)); 
+    axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+      const products=res.data;
+      setProductItem(products);  
+    //debugger
+
+     //alert(res.data.title);
+
+    // const products = products.filter(item => item.categoryId == res.data.product.categoryId); 
 
      //this.setState({ persons });  
      //console.log(res);
      //const products=res.;
    
-     setProductItem(products);
+    // setProductItem(products);
          // alert(productItem);
          })
   

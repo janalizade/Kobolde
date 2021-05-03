@@ -74,7 +74,7 @@ export default function Category(props) {
   });
   const [open, setOpen] = React.useState(false);
   const[x,setX]=React.useState('');
-  
+  const[categories,setCategories]=React.useState([]);
  /* const show=()=>{
     setOpen(true);
   }*/
@@ -102,14 +102,15 @@ export default function Category(props) {
 };
 
 
-function deleteRow(id, e){  
-    axios.delete(`http://localhost:8000/api/v1/admin/category/:id/${id}`)  
+function deleteRow(id, e){ 
+  setCategories(''); 
+    axios.delete(`http://localhost:8000/api/v1/admin/category/${id}`)  
       .then(res => {  
        console.log(res);  
        console.log(res.data);  
        //debugger;
-       const categories = categories.filter(item => item._id !== id);  
-       setCategoryItem(categories);  
+    //  const  categories =categories.filter(item => item._id !== id);  
+    //   setCategoryItem(categories);  
      })  
      
  }  
@@ -176,10 +177,10 @@ function deleteRow(id, e){
         <TableCell>
       
         <IconButton aria-label="delete" className={classes.margin}  color="secondary">
-      
+        <EditIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
         </IconButton>
                   
-
+      
         <IconButton aria-label="edit" className={classes.margin}  color="primary">
           <EditIcon fontSize="small"/>
         </IconButton>
