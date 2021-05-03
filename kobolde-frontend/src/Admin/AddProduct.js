@@ -106,7 +106,7 @@ export default function Product(props) {
     //console.log(file);
     //debugger
     setFile(file)
-    alert(file.name);
+    //alert(file.name);
   }
 
   const resetFile=(event)=> {
@@ -124,10 +124,10 @@ export default function Product(props) {
            //,image:file.name
         
      };
-          alert(categoryId);
-      axios.post('http://localhost:8000/api/v1/admin/category/:categoryId/product', userObject)
+     axios.post(`http://localhost:8000/api/v1/admin/category/product/${categoryId}`,userObject) 
+             
       .then((res) => {
-        console.log(res.data)
+        console.log("res statement is ",res.data)
        }).catch((error) => {
           console.log(error)
       }); 

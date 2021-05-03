@@ -28,7 +28,7 @@ router.patch("/category/:id", CategoryController.update);
 router.delete("/category/:id", CategoryController.remove);
 
 //router.post("/category/:id/product",uploadMiddleware.uploadImage.single('image'), ProductController.create);
-router.post("/category/:id/product", ProductController.create);
+router.post("/category/product/:id", ProductController.create);
 router.get("/product", ProductController.getAll);
-
+router.get("/product/:id", ProductController.getById);
 module.exports = router;

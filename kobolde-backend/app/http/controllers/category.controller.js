@@ -1,5 +1,6 @@
 //models
 const categoryModel = require("../../models/category");
+const product = require("../../models/product");
 //validations
 const categoryValidator = require("../validators/categoryValidator");
 
@@ -12,12 +13,13 @@ module.exports = {
 };
 
 async function getAll(req, res) {
-  categoryModel.find({}).populate("products").exec((err, users) => {
+  
+  categoryModel.find({}).populate("products").exec((err, categories) => {
     if (err) {
       res.status(500).json({ message: "Internal Server Error" });
     }
-    if (users) {
-      return res.status(200).json(users);
+    if (categories) {
+      return res.status(200).json(categories);
     }
     res.json({
       message: "موردی جهت نمایش وجود ندارد",
@@ -27,18 +29,25 @@ async function getAll(req, res) {
 }
 
 async function getById(req, res) {
-  categoryModel.findById(req.params.id).exec((err, user) => {
+  let categoryId=req.params["id"];
+  let category=await (await categoryModel.findById(categoryId)).populate("products");
+  if(!category)
+    return res.status(400).json({message:"category is not Found"});
+    if (category) {
+      return res.status(200).json(category);
+    }
+  /*(await categoryModel.findById(req.params.id)) => {
     if (err) {
       res.status(500).json({ message: "Internal Server Error" });
     }
-    if (user) {
-      return res.status(200).json(user);
+    if (category) {
+      return res.status(200).json(category);
     }
     res.json({
       message: "موردی جهت نمایش وجود ندارد",
       success: false,
     });
-  });
+  });*/
 }
 
 async function create(req, res) {

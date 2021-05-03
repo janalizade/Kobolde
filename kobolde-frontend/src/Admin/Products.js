@@ -93,11 +93,13 @@ export default function Product(props) {
   }*/
  const[categoryId,setCategoryId]=React.useState([]);
  const [categoryItem,setCategoryItem]=React.useState([]);
- const[products,setProductItem]=React.useState([]);
+ const[productItem,setProductItem]=React.useState([]);
+ const[productId,setProductId]=React.useState([]);
  React.useEffect(()=>{
      axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
          const categories=res.data;
          setCategoryItem(categories);
+     
         })
  },[]);
 
@@ -115,34 +117,30 @@ export default function Product(props) {
     setFile({ file: null });
   }
 
+  const searchrow=()=>{  
+    alert(categoryId);
+    
+    axios.get(`http://localhost:8000/api/v1/admin/product/${categoryId}`).then(res=> {
+     alert("record exist");
+     const products = setProductItem(products.filter(item => item.categoryId == res.data.product.categoryId)); 
 
-
-  const onSubmit = (data) => {
-      let userObject = {
-           title:data.title,
-           price:data.price,
-           quantity:data.quantity
-           //,image:file.name
-        
-     };
-          alert(categoryId);
-      axios.post('http://localhost:8000/api/v1/admin/category/:categoryId/product', userObject)
-      .then((res) => {
-        console.log(res.data)
-       }).catch((error) => {
-          console.log(error)
-      }); 
-};
+     //this.setState({ persons });  
+     //console.log(res);
+     //const products=res.;
+   
+     setProductItem(products);
+         // alert(productItem);
+         })
+  
+       //alert(data);
+     //  const products  = state.products.filter(item => item._id == res.data.products._id);  
+  
+     
+  }  
 
 const handleChange = (event) => {
-  setCategoryId( event.target.value);
-  
-  axios.get('http://localhost:8000/api/v1/admin/category/:categoryId/product').then(res=>
-  {
-    alert('handlechange');
-  const products=res.data;
-  setProductItem(products);  
-  });
+  setCategoryId(event.target.value);
+ 
 };
 
 const handleClose = () => {
@@ -181,6 +179,7 @@ const handleOpen = () => {
           
         ))}
         </Select>
+        <Button  variant="outlined"  className={classes.submit}color="primary"onClick={() => searchrow()} >Search</Button>  
         <Table>
           <TableHead className={classes.Table}>
           <TableRow>
@@ -192,17 +191,15 @@ const handleOpen = () => {
           </TableHead>
 
 
-
-
-          {products.map(item=>{
+          {productItem.map(item =>(
              <TableRow>
-             <TableCell>{item._id}</TableCell>
-             <TableCell></TableCell>
-             <TableCell></TableCell>
-             <TableCell></TableCell>
+             <TableCell>{item.title}</TableCell>
+           
            </TableRow>
             
-          })}
+            ))}
+
+        
         </Table>
                         
             
