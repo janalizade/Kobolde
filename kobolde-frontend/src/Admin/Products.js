@@ -104,10 +104,8 @@ export default function Product(props) {
  },[]);
 
  const onChange=(e)=> {
-    //setFile({file: URL.createObjectURL(event.target.files[0])});
+   
     const file = e.target.files[0]
-    //console.log(file);
-    //debugger
     setFile(file)
     alert(file.name);
   }
@@ -118,34 +116,24 @@ export default function Product(props) {
   }
 
   const searchrow=()=>{  
-   // alert(categoryId);
-    
+     
     axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
       const products=res.data;
       setProductItem(products);  
-    //debugger
-
-     //alert(res.data.title);
-
-    // const products = products.filter(item => item.categoryId == res.data.product.categoryId); 
-
-     //this.setState({ persons });  
-     //console.log(res);
-     //const products=res.;
-   
-    // setProductItem(products);
-         // alert(productItem);
+  
          })
   
-       //alert(data);
-     //  const products  = state.products.filter(item => item._id == res.data.products._id);  
+    
   
      
   }  
 
 const handleChange = (event) => {
   setCategoryId(event.target.value);
- 
+  axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+      const products=res.data;
+      setProductItem(products);  
+    })
 };
 
 const handleClose = () => {
@@ -175,7 +163,7 @@ const handleOpen = () => {
           open={open}
           onClose={handleClose}
           onOpen={handleOpen}
-          onChange={handleChange}
+          onClick={handleChange}
         >
         {categoryItem.map(item =>(
           <MenuItem value={item._id}>
@@ -184,13 +172,14 @@ const handleOpen = () => {
           
         ))}
         </Select>
-        <Button  variant="outlined"  className={classes.submit}color="primary"onClick={() => searchrow()} >Search</Button>  
+      
         <Table>
           <TableHead className={classes.Table}>
           <TableRow>
             <TableCell>titel</TableCell>
             <TableCell>kvantitet</TableCell>
             <TableCell>pris</TableCell>
+            <TableCell>ProduktId</TableCell>
             <TableCell>bild</TableCell>
           </TableRow>
           </TableHead>
@@ -199,7 +188,9 @@ const handleOpen = () => {
           {productItem.map(item =>(
              <TableRow>
              <TableCell>{item.title}</TableCell>
-           
+             <TableCell>{item.quantity}</TableCell>
+             <TableCell>{item.price}</TableCell>
+             <TableCell>{item._id}</TableCell>
            </TableRow>
             
             ))}
