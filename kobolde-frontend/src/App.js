@@ -56,16 +56,16 @@ function App() {
           </Typography>
           <IconButton  >
          
-          <Link to="/"  style={{ textDecoration: 'none', color: 'white' }}>Home</Link>
+          <Link to="/"  style={{ textDecoration: 'none', color: 'white' ,fontSize:18}}>Home</Link>
           </IconButton>
           <IconButton color="inherit" >
-          <Link to="/category" style={{ textDecoration: 'none', color: 'white' }}>Kategori</Link>
+          <Link to="/category" style={{ textDecoration: 'none', color: 'white' ,fontSize:18 }}>Kategori</Link>
           </IconButton>
           <IconButton color="inherit" >
-          <Link to="/product" style={{ textDecoration: 'none', color: 'white' }}>Produkt</Link>
+          <Link to="/product" style={{ textDecoration: 'none', color: 'white',fontSize:18 }}>Produkt</Link>
           </IconButton>
           <IconButton color="inherit">
-          <Link to="/productList" style={{ textDecoration: 'none', color: 'white' }}>Produkts</Link>
+          <Link to="/productList" style={{ textDecoration: 'none', color: 'white' ,fontSize:18}}>Produkts</Link>
           </IconButton>
         </Toolbar>
       </AppBar>

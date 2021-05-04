@@ -8,7 +8,11 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+
+
 //import ProductCard from '../Admin/ProductCard'
 import {
     Button,
@@ -130,10 +134,7 @@ export default function Product(props) {
 
 const handleChange = (event) => {
   setCategoryId(event.target.value);
-  axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
-      const products=res.data;
-      setProductItem(products);  
-    })
+  
 };
 
 const handleClose = () => {
@@ -153,25 +154,27 @@ const handleOpen = () => {
           alignItems="center">
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper className={classes.paper}>
-
-
-
             <InputLabel id="demo-controlled-open-select-label">Kategori</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
+            <FormControl className={classes.formControl}>
+
+        
+            <NativeSelect
+          
+         
           id="demo-controlled-open-select"
           open={open}
           onClose={handleClose}
           onOpen={handleOpen}
-          onClick={handleChange}
+          onChange={handleChange}
+          onClick={searchrow}
         >
         {categoryItem.map(item =>(
-          <MenuItem value={item._id}>
+          <option value={item._id}>
             {item.title }
-          </MenuItem>
+          </option>
           
         ))}
-        </Select>
+        </ NativeSelect>
       
         <Table>
           <TableHead className={classes.Table}>
@@ -201,7 +204,7 @@ const handleOpen = () => {
             
             
             
-     
+        </FormControl>
            </Paper>
           </Grid>
         </Grid>

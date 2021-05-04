@@ -148,7 +148,7 @@ function deleteRow(id, e){
                  variant="contained"
                  color="primary"
                  className={classes.submit} >
-                Skicka In
+                Lägg till ny kategori
                 </Button>
                 
               </form>
@@ -181,9 +181,7 @@ function deleteRow(id, e){
         </IconButton>
                   
       
-        <IconButton aria-label="edit" className={classes.margin}  color="primary">
-          <EditIcon fontSize="small"/>
-        </IconButton>
+        
        </TableCell>   
        </TableRow>
      ))}
