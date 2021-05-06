@@ -8,14 +8,17 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-//import ProductCard from '../Admin/ProductCard'
+import NativeSelect from '@material-ui/core/NativeSelect';
+import imageupload from '../components/ImageUpload';
 import {
     Button,
     TextField,
     Box,
     Typography,
     Grid,
+    FormControlLabel,
   } from "@material-ui/core";
   import { useForm, Controller } from "react-hook-form";
   import axios from 'axios';
@@ -88,9 +91,6 @@ export default function Product(props) {
     e.preventDefault();
     setOpen(!open);
   };
- /* const show=()=>{
-    setOpen(true);
-  }*/
  const[categoryId,setCategoryId]=React.useState([]);
  const [categoryItem,setCategoryItem]=React.useState([]);
  React.useEffect(()=>{
@@ -100,15 +100,12 @@ export default function Product(props) {
         })
  },[]);
 
- const onChange=(e)=> {
-    //setFile({file: URL.createObjectURL(event.target.files[0])});
-    const file = e.target.files[0]
-    //console.log(file);
-    //debugger
-    setFile(file)
-    //alert(file.name);
-  }
-
+ const onChangeHandler=(e)=> {
+ 
+    const file = URL.createObjectURL(e.target.files[0])
+     setFile(file)
+    
+    }
   const resetFile=(event)=> {
     event.preventDefault();
     setFile({ file: null });
@@ -120,12 +117,12 @@ export default function Product(props) {
       let userObject = {
            title:data.title,
            price:data.price,
-           quantity:data.quantity
-           //,image:file.name
+           quantity:data.quantity,
+           image:file,
         
      };
+    
      axios.post(`http://localhost:8000/api/v1/admin/category/product/${categoryId}`,userObject) 
-             
       .then((res) => {
         console.log("res statement is ",res.data)
        }).catch((error) => {
@@ -154,27 +151,26 @@ const handleOpen = () => {
           alignItems="center">
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper className={classes.paper}>
-
-
-
-            <InputLabel id="demo-controlled-open-select-label">Kategori</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          onChange={handleChange}
-        >
-        {categoryItem.map(item =>(
-          <MenuItem value={item._id}>
-            {item.title }
-          </MenuItem>
-          
-        ))}
-        </Select>
-
-                        
+            <InputLabel id="demo-controlled-open-select-label">Ny Produkt</InputLabel>
+            <FormControl className={classes.formControl}>
+      
+             <NativeSelect
+              id="demo-controlled-open-select"
+              open={open}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              onChange={handleChange}
+              
+            >
+            {categoryItem.map(item =>(
+              <option value={item._id}>
+                {item.title }
+              </option>
+              
+            ))}
+            </ NativeSelect>
+ 
+                             
             <form onSubmit={handleSubmit(onSubmit)} className={classes.container}>        
               <Controller
                 as={TextField}
@@ -221,28 +217,31 @@ const handleOpen = () => {
                 <div className={classes.paper}>
                 <label htmlFor="name">ladda upp Produkts Bild</label> 
                 <div>
-                <input type="file" onChange={onChange} />
+                <input type="file" onChange={onChangeHandler} />
                 
                 <div style={{ textAlign: "center" }}>
                 <button onClick={resetFile}>Ta bort Fil</button>
                 </div>
                
-               
-                <div> {file.name}</div>
+                <img style={{ width: "100%" }} src={file} />
+              
                 </div>
               
                 </div>
+                
+              
+
                 <Button
                  type="submit"
                  fullWidth
                  variant="contained"
                  color="primary"
                  className={classes.submit} >
-                Skicka In
+                Lägg till ny produkt
                 </Button>
-               
+              
               </form>
-            
+              </FormControl>
             
      
        </Paper>

@@ -5,6 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import EditIcon from "@material-ui/icons/EditOutlined";
+import TrashIcon from '@material-ui/icons/DeleteOutlined';
 import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -85,7 +86,7 @@ export default function Category(props) {
          const categories=res.data;
         setCategoryItem(categories);
         })
- });
+ },[]);
 
   const onSubmit = (data) => {
       let userObject = {
@@ -96,9 +97,16 @@ export default function Category(props) {
       axios.post('http://localhost:8000/api/v1/admin/category', userObject)
       .then((res) => {
         console.log(res.data)
+        axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+        const categories=res.data;
+       setCategoryItem(categories);
+       })
        }).catch((error) => {
           console.log(error)
       }); 
+     
+     
+     
 };
 
 
@@ -111,7 +119,12 @@ function deleteRow(id, e){
        //debugger;
     //  const  categories =categories.filter(item => item._id !== id);  
     //   setCategoryItem(categories);  
+    axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+      const categories=res.data;
+     setCategoryItem(categories);
+     })
      })  
+     
      
  }  
  
@@ -177,7 +190,7 @@ function deleteRow(id, e){
         <TableCell>
       
         <IconButton aria-label="delete" className={classes.margin}  color="secondary">
-        <EditIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
+        <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
         </IconButton>
                   
       

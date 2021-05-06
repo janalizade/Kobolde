@@ -11,7 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
-
+import TrashIcon from '@material-ui/icons/DeleteOutlined';
 
 //import ProductCard from '../Admin/ProductCard'
 import {
@@ -87,14 +87,11 @@ export default function Product(props) {
   const[file,setFile]=React.useState('');
   
 
- 
   const openModal=(e)=>{
     e.preventDefault();
     setOpen(!open);
   };
- /* const show=()=>{
-    setOpen(true);
-  }*/
+
  const[categoryId,setCategoryId]=React.useState([]);
  const [categoryItem,setCategoryItem]=React.useState([]);
  const[productItem,setProductItem]=React.useState([]);
@@ -107,33 +104,29 @@ export default function Product(props) {
         })
  },[]);
 
- const onChange=(e)=> {
-   
-    const file = e.target.files[0]
-    setFile(file)
-    alert(file.name);
-  }
-
-  const resetFile=(event)=> {
-    event.preventDefault();
-    setFile({ file: null });
+  function deleteRow(id,e){
+      axios.delete(`http://localhost:8000/api/v1/admin/product/${id}`).then(res=> {
+        axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+          const products=res.data.product;
+          setProductItem(products); 
+        })
+    })
   }
 
   const searchrow=()=>{  
-     
-    axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
-      const products=res.data;
-      setProductItem(products);  
-  
-         })
-  
-    
-  
-     
+     console.log("categoryId",categoryId);
+           
   }  
 
-const handleChange = (event) => {
-  setCategoryId(event.target.value);
+  const onSubmit=(data)=>{
+    setCategoryId(data.category);
+     axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+      const products=res.data.product;
+      setProductItem(products); 
+    })
+  }
+  const handleChange = (event) => {
+ 
   
 };
 
@@ -154,28 +147,41 @@ const handleOpen = () => {
           alignItems="center">
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper className={classes.paper}>
-            <InputLabel id="demo-controlled-open-select-label">Kategori</InputLabel>
-            <FormControl className={classes.formControl}>
-
-        
-            <NativeSelect
-          
-         
-          id="demo-controlled-open-select"
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          onChange={handleChange}
-          onClick={searchrow}
-        >
-        {categoryItem.map(item =>(
-          <option value={item._id}>
-            {item.title }
-          </option>
-          
-        ))}
-        </ NativeSelect>
-      
+            <form onSubmit={handleSubmit(onSubmit)}>
+            <InputLabel id="demo-controlled-open-select-label">Produkts</InputLabel>
+            <FormControl  className={classes.formControl} >
+            <Controller
+                as={
+                  <NativeSelect
+                  name="categoryTitle"  
+                  id="demo-controlled-open-select"
+                  open={open}
+                  onClose={handleClose}
+                  onOpen={handleOpen}
+                  onChange={handleChange}
+                  >
+                {categoryItem.map(item =>(
+                  <option value={item._id}>
+                    {item.title }
+                  </option>
+                  
+                ))}
+                </ NativeSelect>
+                  
+                }
+                name="category"
+                control={control}
+                fullWidth
+                variant="outlined"
+                label="Kategori Titel "
+                defaultValue=""
+                style={{ marginTop: 10 }}
+                className={classes.textField}
+                rules={{ required: true }}
+                helperText={errors.title && "Det kan inte vara tom"}
+                error={errors.title && true}
+              />
+       <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} > List </Button>
         <Table>
           <TableHead className={classes.Table}>
           <TableRow>
@@ -184,6 +190,7 @@ const handleOpen = () => {
             <TableCell>pris</TableCell>
             <TableCell>ProduktId</TableCell>
             <TableCell>bild</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
           </TableHead>
 
@@ -194,17 +201,17 @@ const handleOpen = () => {
              <TableCell>{item.quantity}</TableCell>
              <TableCell>{item.price}</TableCell>
              <TableCell>{item._id}</TableCell>
+             <TableCell><img src={item.image} height="50" /></TableCell>
+             <TableCell>
+             <IconButton aria-label="delete" className={classes.margin}  color="secondary">
+             <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
+             </IconButton>
+           </TableCell>
            </TableRow>
-            
-            ))}
-
-        
+             ))}
         </Table>
-                        
-            
-            
-            
-        </FormControl>
+      </FormControl>
+        </form>  
            </Paper>
           </Grid>
         </Grid>
