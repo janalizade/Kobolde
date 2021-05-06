@@ -26,7 +26,7 @@ import {
   //import ItemList from './ItemList';
   import MenuItem from '@material-ui/core/MenuItem';
 import { DeleteIcon } from '@material-ui/icons/Delete';
-
+import logo from '../assets/images/logo.png';
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
@@ -147,6 +147,9 @@ const handleOpen = () => {
           alignItems="center">
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper className={classes.paper}>
+            <Typography variant="h3" gutterBottom>
+              <img src={logo}/>
+               </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
             <InputLabel id="demo-controlled-open-select-label">Produkts</InputLabel>
             <FormControl  className={classes.formControl} >

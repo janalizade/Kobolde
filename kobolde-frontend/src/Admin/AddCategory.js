@@ -10,7 +10,7 @@ import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-
+import logo from '../assets/images/logo.png';
 import {
     Button,
     TextField,
@@ -76,9 +76,6 @@ export default function Category(props) {
   const [open, setOpen] = React.useState(false);
   const[x,setX]=React.useState('');
   const[categories,setCategories]=React.useState([]);
- /* const show=()=>{
-    setOpen(true);
-  }*/
 
  const [categoryItem,setCategoryItem]=React.useState([]);
  React.useEffect(()=>{
@@ -104,10 +101,7 @@ export default function Category(props) {
        }).catch((error) => {
           console.log(error)
       }); 
-     
-     
-     
-};
+     };
 
 
 function deleteRow(id, e){ 
@@ -116,10 +110,7 @@ function deleteRow(id, e){
       .then(res => {  
        console.log(res);  
        console.log(res.data);  
-       //debugger;
-    //  const  categories =categories.filter(item => item._id !== id);  
-    //   setCategoryItem(categories);  
-    axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+       axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
       const categories=res.data;
      setCategoryItem(categories);
      })
@@ -138,9 +129,11 @@ function deleteRow(id, e){
           alignItems="center">
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper className={classes.paper}>
-              
+            <Typography variant="h3" gutterBottom>
+              <img src={logo}/>
+               </Typography>
               <form onSubmit={handleSubmit(onSubmit)} className={classes.container}>
-                              
+                     
               <Controller
                 as={TextField}
                 name="title"
@@ -171,15 +164,12 @@ function deleteRow(id, e){
        
            
        <TableHead className={classes.Table}>
-       
        <TableRow>
        <TableCell>Kategorititel</TableCell>
        <TableCell>Id</TableCell>
        <TableCell>Handling</TableCell> 
-       
-         </TableRow>
-
-         </TableHead>
+       </TableRow>
+       </TableHead>
 
          {categoryItem.map(item =>(
            

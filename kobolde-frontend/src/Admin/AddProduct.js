@@ -25,7 +25,7 @@ import {
   //import ItemList from './ItemList';
   import MenuItem from '@material-ui/core/MenuItem';
 import { DeleteIcon } from '@material-ui/icons/Delete';
-
+import logo from '../assets/images/logo.png';
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
@@ -151,6 +151,9 @@ const handleOpen = () => {
           alignItems="center">
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper className={classes.paper}>
+            <Typography variant="h3" gutterBottom>
+              <img src={logo}/>
+               </Typography>
             <InputLabel id="demo-controlled-open-select-label">Ny Produkt</InputLabel>
             <FormControl className={classes.formControl}>
       
@@ -217,11 +220,11 @@ const handleOpen = () => {
                 <div className={classes.paper}>
                 <label htmlFor="name">ladda upp Produkts Bild</label> 
                 <div>
-                <input type="file" onChange={onChangeHandler} />
+                <input className={classes.submit} type="file" onChange={onChangeHandler} />
                 
-                <div style={{ textAlign: "center" }}>
-                <button onClick={resetFile}>Ta bort Fil</button>
-                </div>
+               
+                <button style={{ textAlign: "left" }} className={classes.submit} onClick={resetFile}>Ta bort Fil</button>
+              
                
                 <img style={{ width: "100%" }} src={file} />
               
