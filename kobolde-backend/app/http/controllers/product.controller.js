@@ -14,7 +14,7 @@ module.exports = {
 };
 
 async function getAll(req, res) {
-  productModel.find({}).populate("products").exec((err, users) => {
+  productModel.find({}).exec((err, users) => {
     if (err) {
       res.status(500).json({
         message: "Internal Server Error"
@@ -29,37 +29,37 @@ async function getAll(req, res) {
     });
   });
 }
-async function getByCategoryId(req, res) {
-  let categoryId=req.params["id"];
-  let product=await (await productModel.find({category:categoryId}));
-  if(!product)
-    return res.status(400).json({message:"product is not Found"});
-    if (product) {
-      return res.status(200).json(product);
-    }
-}
-
 
 async function getById(req, res) {
-  productModel.findById(req.params.id).exec((err, user) => {
-    if (err) {
-      res.status(500).json({
-        message: "Internal Server Error"
-      });
+  let categoryId=req.params["categoryId"];
+  console.log(categoryId);
+  productModel.findOne({'categoryId': categoryId}).then(product =>{
+    console.log(product);
+    if(product) {
+         return res.status(200).json({success: true, product})
+    } else {
+        return res.status(400).json({success: false , message: "product not found!"})
     }
-    if (user) {
-      return res.status(200).json(user);
+  }
+  )}
+
+
+async function getByCategoryId(req, res) {
+  let categoryId=req.params["id"];
+  console.log(categoryId);
+  productModel.find({'categoryId': categoryId}).then(product =>{
+    console.log(product);
+    if(product) {
+         return res.status(200).json({success: true, product})
+    } else {
+        return res.status(400).json({success: false , message: "product not found!"})
     }
-    res.json({
-      message: "موردی جهت نمایش وجود ندارد",
-      success: false,
-    });
-  });
-}
+  }
+  )}
 
 
 async function create(req, res) {
-  let categoryId = req.params["id"];
+  let categoryId = req.params["categoryId"];
   let category = await Category.findById(categoryId);
   if (!category)
     return res.status(400).json({
@@ -67,15 +67,17 @@ async function create(req, res) {
     });
   try{
     let product = new productModel({
-    category: categoryId,
+    categoryId: categoryId,
     title: req.body.title,
     quantity: req.body.quantity,
-    //image: "http://bakuyacomplex.ir/" + req.file.path.replace(/\\/g, "/"),
+    image:req.body.image, 
+    //"http://bakuyacomplex.ir/" + req.file.path.replace(/\\/g, "/"),
     price: req.body.price
   });
-  let createdProduct = await product.save();
-  category.products.push(createdProduct._id);
-  category.save();
+  console.log(product);
+   await product.save();
+  //category.products.push(createdProduct._id);
+  //category.save();
 
   /*let k=await category.update({
     _id: categoryId

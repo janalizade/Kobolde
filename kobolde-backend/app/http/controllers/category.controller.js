@@ -14,7 +14,7 @@ module.exports = {
 
 async function getAll(req, res) {
   
-  categoryModel.find({}).populate("products").exec((err, categories) => {
+  categoryModel.find({}).exec((err, categories) => {
     if (err) {
       res.status(500).json({ message: "Internal Server Error" });
     }
@@ -30,7 +30,7 @@ async function getAll(req, res) {
 
 async function getById(req, res) {
   let categoryId=req.params["id"];
-  let category=await (await categoryModel.findById(categoryId)).populate("products");
+  let category=await (await categoryModel.findById(categoryId));
   if(!category)
     return res.status(400).json({message:"category is not Found"});
     if (category) {
