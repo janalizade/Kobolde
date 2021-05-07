@@ -22,6 +22,8 @@ import {
   } from "@material-ui/core";
   import { useForm, Controller } from "react-hook-form";
   import axios from 'axios';
+  import formData from 'form-data';
+  import fs from 'fs';
   //import ItemList from './ItemList';
   import MenuItem from '@material-ui/core/MenuItem';
 import { DeleteIcon } from '@material-ui/icons/Delete';
@@ -84,6 +86,7 @@ export default function Product(props) {
   const [open, setOpen] = React.useState(false);
   const[x,setX]=React.useState('');
   const[file,setFile]=React.useState('');
+  const[img,setImg]=React.useState('');
   
 
  
@@ -102,32 +105,38 @@ export default function Product(props) {
 
  const onChangeHandler=(e)=> {
  
-    const file = URL.createObjectURL(e.target.files[0])
-     setFile(file)
-    
+    const file = e.target.files[0]
+    setFile(file)
+    setImg(URL.createObjectURL(file));
     }
   const resetFile=(event)=> {
     event.preventDefault();
-    setFile({ file: null });
+    setImg({ file: null });
   }
 
-
-
   const onSubmit = (data) => {
-      let userObject = {
-           title:data.title,
-           price:data.price,
-           quantity:data.quantity,
-           image:file,
-        
-     };
+   var formdata =new formData();
+  formdata.append('title',data.title);
+  formdata.append('price',data.price);
+  formdata.append('quantity',data.quantity);
+  formdata.append('image',file);
+  formdata.append('category_id', categoryId);
+     var config = {
+      method: 'post',
+      url: 'http://localhost:8000/api/v1/admin/product',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data : formdata
+    };
     
-     axios.post(`http://localhost:8000/api/v1/admin/category/product/${categoryId}`,userObject) 
-      .then((res) => {
-        console.log("res statement is ",res.data)
-       }).catch((error) => {
-          console.log(error)
-      }); 
+    axios(config)
+     .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };
 
 const handleChange = (event) => {
@@ -226,7 +235,7 @@ const handleOpen = () => {
                 <button style={{ textAlign: "left" }} className={classes.submit} onClick={resetFile}>Ta bort Fil</button>
               
                
-                <img style={{ width: "100%" }} src={file} />
+                <img style={{ width: "100%" }} src={img} />
               
                 </div>
               
@@ -247,7 +256,7 @@ const handleOpen = () => {
               </FormControl>
             
      
-       </Paper>
+          </Paper>
           </Grid>
         </Grid>
       </Box>

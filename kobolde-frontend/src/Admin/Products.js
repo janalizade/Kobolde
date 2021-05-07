@@ -119,6 +119,7 @@ export default function Product(props) {
   }  
 
   const onSubmit=(data)=>{
+  //  debugger
     setCategoryId(data.category);
      axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
       const products=res.data.product;
@@ -126,7 +127,12 @@ export default function Product(props) {
     })
   }
   const handleChange = (event) => {
- 
+    setCategoryId('');
+    setCategoryId(event.target.value);
+    axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+     const products=res.data.product;
+     setProductItem(products); 
+   })
   
 };
 
@@ -140,12 +146,12 @@ const handleOpen = () => {
 
   return (
     <div className={classes.root}>
-      <Box mt={5} px={2}>
+      <Box mt={5} px={3}>
         <Grid container spacing={3}
           direction="row"
           justify="center"
           alignItems="center">
-          <Grid item xs={12} sm={8} md={6} lg={4}>
+          <Grid item xs={12} sm={8} md={6} lg={5}>
             <Paper className={classes.paper}>
             <Typography variant="h3" gutterBottom>
               <img src={logo}/>
@@ -161,7 +167,7 @@ const handleOpen = () => {
                   open={open}
                   onClose={handleClose}
                   onOpen={handleOpen}
-                  onChange={handleChange}
+                  onChange={handleSubmit}
                   >
                 {categoryItem.map(item =>(
                   <option value={item._id}>
