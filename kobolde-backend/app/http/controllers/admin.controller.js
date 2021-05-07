@@ -110,7 +110,7 @@ async function current(req, res) {
       return res.status(200).json(user);
     } else {
       res.status(400).json({
-        message: "موردی یافت نشد",
+        message: "Record not found",
         success: false,
       });
     }
@@ -126,7 +126,7 @@ async function getAll(req, res) {
       return res.status(200).json(users);
     }
     res.json({
-      message: "موردی جهت نمایش وجود ندارد",
+      message: "Record not found",
       success: false,
     });
   });
@@ -141,7 +141,7 @@ async function getById(req, res) {
       return res.status(200).json(user);
     }
     res.json({
-      message: "موردی جهت نمایش وجود ندارد",
+      message: "Record is not found",
       success: false,
     });
   });
@@ -164,7 +164,7 @@ async function create(req, res) {
     });
 
     await user.save();
-    res.json({ message: "کاربر با موفقیت ایجاد شد" });
+    res.json({ message: "User added sucessfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -179,9 +179,9 @@ async function update(req, res) {
         res.status(500).json({ message: "Internal Server Error" });
       }
       if (user) {
-        return res.json({ message: "ویرایش اطلاعات با موفقیت انجام شد" });
+        return res.json({ message: "Record updated successfully" });
       } else {
-        return res.json({ message: "موردی یافت نشد" });
+        return res.json({ message: "Record not found" });
       }
     }
   );
@@ -193,9 +193,9 @@ async function remove(req, res) {
       res.status(500).json({ message: "Internal Server Error" });
     }
     if (item) {
-      res.json({ message: "حذف اطلاعات با موفقیت انجام شد" });
+      res.json({ message: "Record deleted successfully" });
     } else {
-      res.json({ message: "موردی یافت نشد" });
+      res.json({ message: "Record not found" });
     }
   });
 }

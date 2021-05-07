@@ -22,7 +22,7 @@ async function getAll(req, res) {
       return res.status(200).json(categories);
     }
     res.json({
-      message: "موردی جهت نمایش وجود ندارد",
+      message: "Record not found",
       success: false,
     });
   });
@@ -79,9 +79,9 @@ async function update(req, res) {
         res.status(500).json({ message: "Internal Server Error" });
       }
       if (user) {
-        return res.json({ message: "ویرایش اطلاعات با موفقیت انجام شد" });
+        return res.json({ message: "Record updated successfully" });
       } else {
-        return res.json({ message: "موردی یافت نشد" });
+        return res.json({ message: "Record not found" });
       }
     }
   );
@@ -93,9 +93,9 @@ async function remove(req, res) {
       res.status(500).json({ message: "Internal Server Error" });
     }
     if (item) {
-      res.json({ message: "حذف اطلاعات با موفقیت انجام شد" });
+      res.json({ message: "Record deleted successfully" });
     } else {
-      res.json({ message: "موردی یافت نشد" });
+      res.json({ message: "Record not found" });
     }
   });
 }

@@ -28,7 +28,7 @@ async function register(req, res) {
     let user = await userModel.findOne({ mobile, verifyCode: verify });
 
     if (!user) {
-      errors.message = "کاربری با این شماره یافت نشد";
+      errors.message ="Record not found";
       return res.status(400).json(errors);
     }
 
@@ -93,7 +93,7 @@ async function login(req, res) {
     if (!user.active) {
       return res.json({
         message:
-          "حساب کاربری شما مسدود می باشد. لطفا با مدیر سیستم تماس حاصل فرمایید",
+          "Please do contact with administrator",
         success: false,
       });
     }
@@ -112,7 +112,7 @@ async function login(req, res) {
 
     user.verifyCode = code;
     await user.save();
-    return res.json({ success: true, message: "پیامک فعالسازی ارسال شد" });
+    return res.json({ success: true, message: "The message is active" });
   }
 }
 
@@ -127,7 +127,7 @@ async function current(req, res) {
       return res.status(200).json(user);
     } else {
       res.status(400).json({
-        message: "موردی یافت نشد",
+        message: "Record not found",
         success: false,
       });
     }
