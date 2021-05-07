@@ -3,9 +3,7 @@ const Schema = mongoose.Schema;
 const timestamp = require("mongoose-timestamp");
 
 const ProductSchema = new Schema({
-  categoryId:{
-    type: String,
-  } ,
+  category: { type: Schema.Types.ObjectId, ref: "Category" },
   title: {
     type: String,
   },

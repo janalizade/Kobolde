@@ -9,6 +9,7 @@ const ProductController = require("../../../http/controllers/product.controller.
 const Auth = require("../../../http/middlewares/auth");
 const Admin = require("../../../http/middlewares/admin");
 //auth
+//router.post("/product", ProductController.create);
 router.post("/register", AdminController.register);
 router.post("/login", AdminController.login);
 router.get("/current", [Auth, Admin], AdminController.current);
@@ -27,8 +28,8 @@ router.get("/category/:id", CategoryController.getById);
 router.patch("/category/:id", CategoryController.update);
 router.delete("/category/:id", CategoryController.remove);
 
-//router.post("/category/:id/product",uploadMiddleware.uploadImage.single('image'), ProductController.create);
-router.post("/category/product/:categoryId", ProductController.create);
+
+router.post("/product",uploadMiddleware.uploadImage.single('image'), ProductController.create);
 router.get("/product", ProductController.getAll);
 router.get("/product/:categoryId", ProductController.getById);
 router.get("/productx/:id", ProductController.getByCategoryId);

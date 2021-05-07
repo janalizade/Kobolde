@@ -42,7 +42,7 @@ module.exports = class Application {
 
   setConfig() {
     // Body parser middleware
-    app.use(fileUpload({ createParentPath: true }));
+  //  app.use(fileUpload({ createParentPath: true }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json({ type: "application/json" }));
     app.use("/public", express.static("public"));

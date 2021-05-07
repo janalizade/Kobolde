@@ -47,7 +47,7 @@ async function getById(req, res) {
 async function getByCategoryId(req, res) {
   let categoryId=req.params["id"];
   console.log(categoryId);
-  productModel.find({'categoryId': categoryId}).then(product =>{
+  productModel.find({category: categoryId}).then(product =>{
     console.log(product);
     if(product) {
          return res.status(200).json({success: true, product})
@@ -59,40 +59,28 @@ async function getByCategoryId(req, res) {
 
 
 async function create(req, res) {
-  let categoryId = req.params["categoryId"];
-  let category = await Category.findById(categoryId);
-  if (!category)
-    return res.status(400).json({
-      message: "category id not found"
+    
+   let category = Category.findById(req.body.category_id, (err, category) => {
+     let product = new productModel({
+      category: category._id,
+      title: req.body.title,
+     image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
+      quantity:req.body.quantity,
+      price: req.body.price
     });
-  try{
-    let product = new productModel({
-    categoryId: categoryId,
-    title: req.body.title,
-    quantity: req.body.quantity,
-    image:req.body.image, 
-    //"http://bakuyacomplex.ir/" + req.file.path.replace(/\\/g, "/"),
-    price: req.body.price
-  });
-  console.log(product);
-   await product.save();
-  //category.products.push(createdProduct._id);
-  //category.save();
 
-  /*let k=await category.update({
-    _id: categoryId
-  }, {
-    $push: {
-      products: createdProduct._id
-    }
+    product.save(err => {
+      if (err) throw err;
+      category.products.push(product._id);
+      category.save();
+      res.json({
+        message: "product Created",
+        success: true
+      });
+    });
   });
-*/
-  console.log(category);
-  return res.status(200).json({message: "done"});
-}catch (error) {
-  res.status(500).json({ message: "Internal Server Error" });
 }
-}
+  
 async function update(req, res) {
   productModel.findByIdAndUpdate(
     req.params.id, {
