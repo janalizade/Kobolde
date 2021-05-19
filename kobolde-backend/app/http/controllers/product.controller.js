@@ -10,6 +10,7 @@ module.exports = {
   create,
   update,
   remove,
+  createAll,
   getByCategoryId,
 };
 
@@ -57,6 +58,24 @@ async function getByCategoryId(req, res) {
   }
   )}
 
+  async function createAll(req, res) {
+    console.log("-----------> createAll")
+    
+    try {
+      let product = new productModel({
+        title: req.body.title,
+        image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
+        serialNo:req.body.serialNo,
+      });
+      console.log("----------->"+ product.image);
+      await product.save();
+      res.json({ message: "Product added" });
+    } catch (error) {
+      console.log(error.message);
+      res.status(400).json({ message: '${error.message}' });
+    }
+  }
+   
 
 async function create(req, res) {
     
@@ -64,7 +83,7 @@ async function create(req, res) {
      let product = new productModel({
       category: category._id,
       title: req.body.title,
-     image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
+      image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
       quantity:req.body.quantity,
       price: req.body.price
     });

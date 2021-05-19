@@ -14,7 +14,9 @@ const ProductSchema = new Schema({
     type: String,
   },
   
-  
+  serialNo:{
+    type: String,
+  },
   quantity: {
      type: Number
         },

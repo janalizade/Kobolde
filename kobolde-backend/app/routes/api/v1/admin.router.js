@@ -30,6 +30,7 @@ router.delete("/category/:id", CategoryController.remove);
 
 
 router.post("/product",uploadMiddleware.uploadImage.single('image'), ProductController.create);
+router.post("/productx",uploadMiddleware.uploadImage.single('image'), ProductController.createAll);
 router.get("/product", ProductController.getAll);
 router.get("/product/:categoryId", ProductController.getById);
 router.get("/productx/:id", ProductController.getByCategoryId);
