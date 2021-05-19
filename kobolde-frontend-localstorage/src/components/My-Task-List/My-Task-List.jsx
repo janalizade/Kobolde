@@ -22,6 +22,8 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import formData from 'form-data';
+import Resizer from 'react-image-file-resizer';
+
 const styles = theme => ({
  
   paper: {
@@ -64,6 +66,7 @@ const styles = theme => ({
   },
 });
 
+
 class MyTaskList extends Component {
  
   constructor(props) {
@@ -76,11 +79,19 @@ class MyTaskList extends Component {
       taskImage: { file: null } ,
        tasklist: [],
        connsctionStatus:"",
-       selection : 1
+       newImage: "",
+          selection : 1
     };
+    
     window.localStorage.clear();
   }
- 
+   onChange = async (event) => {
+    const file = event.target.files[0];
+   
+   
+  };
+  
+
   // on load get the task list
   componentDidMount = () => {
     var status=navigator.onLine;
@@ -93,7 +104,29 @@ class MyTaskList extends Component {
     this.getTasks();
   };
 
-
+  fileChangedHandler1=(event)=> {
+    var fileInput = false
+    if(event.target.files[0]) {
+        fileInput = true
+    }
+    if(fileInput) {
+        Resizer.imageFileResizer(
+            event.target.files[0],
+            300,
+            300,
+            'JPEG',
+            100,
+            0,
+            uri => {
+                 this.setState({
+                  taskImage: uri
+                });
+                console.log(uri)
+            },
+            'base64'
+        );
+    }
+}
   
   onChange = event => {
   
@@ -101,61 +134,7 @@ class MyTaskList extends Component {
       [event.target.name]: event.target.value
     });
   };
-
-
-  getBase64 = file => {
-    return new Promise(resolve => {
-      let fileInfo;
-      let baseURL = "";
-      // Make new FileReader
-      let reader = new FileReader();
-
-      // Convert the file to base64 text
-      reader.readAsDataURL(file);
-
-      // on reader load somthing...
-      reader.onload = () => {
-        // Make a fileInfo Object
-        console.log("Called", reader);
-        baseURL = reader.result;
-        console.log(baseURL);
-        resolve(baseURL);
-      };
-      console.log(fileInfo);
-    });
-  };
  
-  handleFileInputChange = e => {
-   
-    console.log(e.target.files[0]);
-    let { file } = this.state;
-
-    file = e.target.files[0];
-
-    this.getBase64(file)
-      .then(result => {
-        file["base64"] = result;
-        console.log("File Is", result);
-        this.setState({
-          base64URL: result,
-          file
-        });
-        this.setState({
-          taskImage: result
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    this.setState({
-      file: e.target.files[0]
-    });
-  
-  };
-
-
-
 
   onchangeImage=event=>{
     this.setState({
@@ -411,10 +390,9 @@ onSync=()=>{
               fluid
               placeholder="serialNo..."
             />
-              <input type="file" name="file"  onChange={this.handleFileInputChange} />
+              <input type="file" name="file"  onChange={this.fileChangedHandler1} />
               
-            
-          
+                                      
         <div className={classes.root}>
         <MuiThemeProvider >
          <DropDownMenu 
