@@ -115,6 +115,7 @@ export default function Product(props) {
   }
 
   const onSubmit = (data) => {
+    console.log(file);
    var formdata =new formData();
   formdata.append('title',data.title);
   formdata.append('price',data.price);
