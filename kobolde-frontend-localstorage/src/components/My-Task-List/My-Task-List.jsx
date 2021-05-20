@@ -20,6 +20,10 @@ import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import formData from 'form-data';
 import Resizer from 'react-image-file-resizer';
+import { ThreeSixty } from "@material-ui/icons";
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 const styles = theme => ({
  
@@ -75,7 +79,10 @@ class MyTaskList extends Component {
       serialNo:"",
       image: { file: null } ,
       tasklist: [],
-      selection : 1
+      selection : 1,
+      categoryItem:[],
+      categoryId:"",
+      open:[false]
     };
     
     window.localStorage.clear();
@@ -86,14 +93,29 @@ class MyTaskList extends Component {
   
   // on load get the task list
   componentDidMount = () => {
-    var status=navigator.onLine;
+     var status=navigator.onLine;
     if(status) {
      this.setState({connectionStatus:"online"});
      }else{
       this.setState({connectionStatus:"offline"});
       }
      this.getTasks();
+     //Category List loaded from database
+     axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+         const categories=res.data;
+         this.setState({categoryItem:categories});
+         
+        })
     };
+  
+   handleClose = () => {
+      this.setState({open:false});
+    };
+    
+   handleOpen = () => {
+    this.setState({open:true});
+    };
+      
 
   fileChangedHandler=(event)=> {
     var fileInput = false
@@ -118,7 +140,9 @@ class MyTaskList extends Component {
         );
     }
 }
-  
+ handleChange = (event) => {
+  this.setState({categoryId:event.target.value});
+};
   onChange = event => {
   
     this.setState({
@@ -133,6 +157,7 @@ onSync=()=>{
       var formdata =new formData();
       formdata.append('title',item.task);
       formdata.append('serialNo',item.serialNo);
+      formdata.append('category_id', this.state.categoryId);
       const contentType = 'image/png';
       const data = item.image.split('base64,')[1];
       const blob = base64StringToBlob(data, contentType);
@@ -181,14 +206,14 @@ onSync=()=>{
       let task = {
         
         task: ` ${this.state.task}`,
-        category: `${this.state.category}`,
+        category: `${this.state.categoryId}`,
         serialNo: ` ${this.state.serialNo}`,
         image:` ${this.state.image}`,
         status: false
       };
     
       // add the task to the task list
-      
+
       tasklist.push(task);
 
       // save the task list in the local storage
@@ -339,15 +364,30 @@ onSync=()=>{
         
        
           <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
-          <Form  onSubmit={this.onSubmit}>
-          <Input
-              type="text"
-              name="category"
-              onChange={this.onChange}
-              value={this.state.category}
-              fluid
-              placeholder="category..."
-            />
+         
+          
+            <FormControl className={classes.formControl}>
+      
+             <NativeSelect
+              id="demo-controlled-open-select"
+              open={this.open}
+              onClose={this.handleClose}
+              onOpen={this.handleOpen}
+              onChange={this.handleChange}
+              
+            >
+            {this.state.categoryItem.map(item =>(
+              <option value={item._id}>
+                {item.title }
+              </option>
+              
+            ))}
+            </ NativeSelect>
+
+
+            <Form  onSubmit={this.onSubmit}>
+
+         
             <Input
               type="text"
               name="task"
@@ -385,6 +425,7 @@ onSync=()=>{
           <Card.Group className={classes.paper}>{this.state.tasklist}</Card.Group>
       
         </Form>
+        </FormControl>
       </Paper>
       </Grid>
       </Grid>
