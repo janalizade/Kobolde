@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
-import { makeStyles, createStyles} from '@material-ui/core/styles';
 import "./my-task-list.css";
 import { Offline, Online } from "react-detect-offline"
-import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
 import { base64StringToBlob } from 'blob-util';
 import {
@@ -17,7 +15,6 @@ import {
 } from "@material-ui/core";
 import logo from '../My-Task-List/logo.png';
 import { withStyles } from "@material-ui/core/styles";
-import { green } from "@material-ui/core/colors";
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -74,37 +71,31 @@ class MyTaskList extends Component {
     this.state = { file: null };
     this.state = {
       task: "",
-      taskCategory:"",
-      taskSerialNo:"",
-      taskImage: { file: null } ,
-       tasklist: [],
-       connsctionStatus:"",
-       newImage: "",
-          selection : 1
+      category:"",
+      serialNo:"",
+      image: { file: null } ,
+      tasklist: [],
+      selection : 1
     };
     
     window.localStorage.clear();
   }
    onChange = async (event) => {
     const file = event.target.files[0];
-   
-   
-  };
+   };
   
-
   // on load get the task list
   componentDidMount = () => {
     var status=navigator.onLine;
     if(status) {
      this.setState({connectionStatus:"online"});
-  
-    }else{
+     }else{
       this.setState({connectionStatus:"offline"});
       }
-    this.getTasks();
-  };
+     this.getTasks();
+    };
 
-  fileChangedHandler1=(event)=> {
+  fileChangedHandler=(event)=> {
     var fileInput = false
     if(event.target.files[0]) {
         fileInput = true
@@ -119,7 +110,7 @@ class MyTaskList extends Component {
             0,
             uri => {
                  this.setState({
-                  taskImage: uri
+                  image: uri
                 });
                 console.log(uri)
             },
@@ -135,33 +126,17 @@ class MyTaskList extends Component {
     });
   };
  
-
-  onchangeImage=event=>{
-    this.setState({
-      file: URL.createObjectURL(event.target.files[0])
-    });
    
-    this.setState({
-      taskImage: event.target.files[0]
-    });
-        
-  }
-  
 onSync=()=>{
   let tasklist = JSON.parse(localStorage.getItem("tasklist"));
      tasklist.map((item, index) => {
-      console.log("item task",item);
-     console.log("item task",item.task);
-     console.log("item serialNo",item.taskSerialNo);
-     console.log("item image",item.taskImage.constructor);
       var formdata =new formData();
       formdata.append('title',item.task);
-      formdata.append('serialNo',item.taskSerialNo);
+      formdata.append('serialNo',item.serialNo);
       const contentType = 'image/png';
-      const data = item.taskImage.split('base64,')[1];
+      const data = item.image.split('base64,')[1];
       const blob = base64StringToBlob(data, contentType);
-      console.log(blob);
-      formdata.append('image',blob);
+        formdata.append('image',blob);
          var config = {
           method: 'post',
           url: 'http://localhost:8000/api/v1/admin/productx',
@@ -206,10 +181,10 @@ onSync=()=>{
       let task = {
         
         task: ` ${this.state.task}`,
-        taskCategory: `${this.state.taskCategory}`,
-        taskSerialNo: ` ${this.state.taskSerialNo}`,
-        taskImage:` ${this.state.taskImage}`,
-         status: false
+        category: `${this.state.category}`,
+        serialNo: ` ${this.state.serialNo}`,
+        image:` ${this.state.image}`,
+        status: false
       };
     
       // add the task to the task list
@@ -222,9 +197,9 @@ onSync=()=>{
 
       // clear the form
       this.setState({ task: "" });
-      this.setState({taskCategory:""});
-      this.setState({taskSerialNo:""});
-      this.setState({taskImage:""});
+      this.setState({category:""});
+      this.setState({serialNo:""});
+      this.setState({image:""});
 
       // refresh the tasks
       this.getTasks();
@@ -273,9 +248,9 @@ onSync=()=>{
               <Card.Content>
                 <Card.Header textAlign="left" style={taskComplete}>
                   <div style={{ wordWrap: "break-word" }}>motor : {item.task}</div>
-                  <div style={{ wordWrap: "break-word" }}>category: {item.taskCategory}</div>
-                  <div style={{ wordWrap: "break-word" }}>serialNo:{item.taskSerialNo}</div>
-                  <img style={{ width: "40%" }} src={item.taskImage}/>
+                  <div style={{ wordWrap: "break-word" }}>category: {item.category}</div>
+                  <div style={{ wordWrap: "break-word" }}>serialNo:{item.serialNo}</div>
+                  <img style={{ width: "40%" }} src={item.image}/>
                 </Card.Header>
 
                 <Card.Meta textAlign="right">
@@ -367,9 +342,9 @@ onSync=()=>{
           <Form  onSubmit={this.onSubmit}>
           <Input
               type="text"
-              name="taskCategory"
+              name="category"
               onChange={this.onChange}
-              value={this.state.taskCategory}
+              value={this.state.category}
               fluid
               placeholder="category..."
             />
@@ -384,13 +359,13 @@ onSync=()=>{
          
             <Input
               type="text"
-              name="taskSerialNo"
+              name="serialNo"
               onChange={this.onChange}
-              value={this.state.taskSerialNo}
+              value={this.state.serialNo}
               fluid
               placeholder="serialNo..."
             />
-              <input type="file" name="file"  onChange={this.fileChangedHandler1} />
+              <input type="file" name="file"  onChange={this.fileChangedHandler} />
               
                                       
         <div className={classes.root}>

@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
@@ -16,9 +17,11 @@
     "react": "^16.13.0",
     "react-detect-offline": "^2.4.3",
     "react-dom": "^16.13.0",
+    "react-hook-form": "^7.6.2",
     "react-image-compressor": "^1.0.1",
     "react-image-file-resizer": "^0.4.4",
     "react-native-image-resizer": "^1.4.4",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.0",
     "semantic-ui-react": "^0.88.2"
   },
