@@ -100,12 +100,17 @@ class MyTaskList extends Component {
       this.setState({connectionStatus:"offline"});
       }
      this.getTasks();
+     
+     
      //Category List loaded from database
      axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
          const categories=res.data;
-         this.setState({categoryItem:categories});
-         
+         localStorage.setItem("categoryItem", JSON.stringify(categories));
+         let categoryItem = JSON.parse(localStorage.getItem("categoryItem")); 
+         this.setState({categoryItem:categoryItem});
+         console.log("categoryItem---->",categoryItem);
         })
+  
     };
   
    handleClose = () => {
@@ -376,6 +381,7 @@ onSync=()=>{
               onChange={this.handleChange}
               
             >
+               
             {this.state.categoryItem.map(item =>(
               <option value={item._id}>
                 {item.title }
