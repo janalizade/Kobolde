@@ -80,7 +80,7 @@ export default function Category(props) {
 
  const [categoryItem,setCategoryItem]=React.useState([]);
  React.useEffect(()=>{
-     axios.get('http://kobolde.ahoora.se:8080/api/v1/admin/category').then(res=>{
+     axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
          const categories=res.data;
         setCategoryItem(categories);
         })
@@ -93,10 +93,10 @@ export default function Category(props) {
         
      };
           
-      axios.post('http://kobolde.ahoora.se:8080/api/v1/admin/category', userObject)
+      axios.post('https://kobolde.ahoora.se:8443/api/v1/admin/category', userObject)
       .then((res) => {
         console.log(res.data)
-        axios.get('http://kobolde.ahoora.se:8080/api/v1/admin/category').then(res=>{
+        axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
         const categories=res.data;
        setCategoryItem(categories);
        })
@@ -108,11 +108,11 @@ export default function Category(props) {
 
 function deleteRow(id, e){ 
   setCategories(''); 
-    axios.delete(`http://kobolde.ahoora.se:8080/api/v1/admin/category/${id}`)  
+    axios.delete(`https://kobolde.ahoora.se:8443/api/v1/admin/category/${id}`)  
       .then(res => {  
        console.log(res);  
        console.log(res.data);  
-       axios.get('http://kobolde.ahoora.se:8080/api/v1/admin/category').then(res=>{
+       axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
       const categories=res.data;
      setCategoryItem(categories);
      })
