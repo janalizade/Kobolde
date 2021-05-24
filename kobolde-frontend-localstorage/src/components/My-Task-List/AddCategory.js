@@ -80,7 +80,8 @@ export default function Category(props) {
 
  const [categoryItem,setCategoryItem]=React.useState([]);
  React.useEffect(()=>{
-     axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
+
+     axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
          const categories=res.data;
         setCategoryItem(categories);
         })
@@ -93,10 +94,10 @@ export default function Category(props) {
         
      };
           
-      axios.post('https://kobolde.ahoora.se:8443/api/v1/admin/category', userObject)
+      axios.post('http://localhost:8000/api/v1/admin/category', userObject)
       .then((res) => {
         console.log(res.data)
-        axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
+        axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
         const categories=res.data;
        setCategoryItem(categories);
        })
@@ -108,11 +109,11 @@ export default function Category(props) {
 
 function deleteRow(id, e){ 
   setCategories(''); 
-    axios.delete(`https://kobolde.ahoora.se:8443/api/v1/admin/category/${id}`)  
+    axios.delete(`http://localhost:8000/api/v1/admin/category/${id}`)  
       .then(res => {  
        console.log(res);  
        console.log(res.data);  
-       axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
+       axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
       const categories=res.data;
      setCategoryItem(categories);
      })
@@ -170,7 +171,6 @@ function deleteRow(id, e){
        <TableHead className={classes.Table}>
        <TableRow>
        <TableCell>Kategorititel</TableCell>
-       <TableCell>Id</TableCell>
        <TableCell>Handling</TableCell> 
        </TableRow>
        </TableHead>
@@ -180,7 +180,7 @@ function deleteRow(id, e){
         <TableRow>
         <TableCell>{item.title}</TableCell>
         
-        <TableCell>{item._id}</TableCell>
+       
         <TableCell>
       
         <IconButton aria-label="delete" className={classes.margin}  color="secondary">
