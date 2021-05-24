@@ -23,6 +23,7 @@ router.delete("/users/:id", [Auth, Admin], AdminController.remove);
 router.get("/orders", [Auth, Admin], AdminController.getUserOrders);
 //categories
 router.post("/category", CategoryController.create);
+router.get("/health", CategoryController.health);
 router.get("/category", CategoryController.getAll);
 router.get("/category/:id", CategoryController.getById);
 router.patch("/category/:id", CategoryController.update);

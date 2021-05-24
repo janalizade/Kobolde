@@ -10,7 +10,12 @@ module.exports = {
   create,
   update,
   remove,
+  health,
 };
+
+async function health(req, res) {
+  res.status(200).end();
+}
 
 async function getAll(req, res) {
   
