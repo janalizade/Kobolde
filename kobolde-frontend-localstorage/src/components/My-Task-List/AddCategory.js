@@ -23,13 +23,16 @@ import {
   //import ItemList from './ItemList';
 import { DeleteIcon } from '@material-ui/icons/Delete';
 
+
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
+      width: '80%',
       marginTop: theme.spacing(15),
       flexGrow: 1,
     },
     paper: {
+      width: '80%',
       padding: theme.spacing(2),
       textAlign: 'center',
       color: theme.palette.text.secondary,
@@ -56,7 +59,7 @@ const useStyles = makeStyles((theme) =>
       },
       
     Table: {
-      width: '100%',
+      width: '70%',
       backgroundColor: 'orange',
       maxWidth: 2200,
       marginTop:350,
@@ -124,20 +127,15 @@ function deleteRow(id, e){
  
 
   return (
-  <div className={classes.root}>
-      <Box mt={5} px={2}>
-        <Grid container spacing={3}
-          direction="row"
-          justify="center"
-          alignItems="center">
-          <Grid item xs={12} sm={8} md={6} lg={4}>
-            <Paper className={classes.paper}>
-            <Typography variant="h3" gutterBottom>
-              <img src={logo}/>
-               </Typography>
+    <div className={classes.form}>
+    <Grid container spacing={3}
+      direction="row">
+        <Paper className={classes.paper}>
+        <Typography variant="h3" gutterBottom>
+          <img src={logo}/>
+        </Typography>
               <form onSubmit={handleSubmit(onSubmit)} className={classes.container}>
-            
-               <Controller
+              <Controller
                control={control}
                name="title"
                defaultValue=""
@@ -179,10 +177,7 @@ function deleteRow(id, e){
            
         <TableRow>
         <TableCell>{item.title}</TableCell>
-        
-       
         <TableCell>
-      
         <IconButton aria-label="delete" className={classes.margin}  color="secondary">
         <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
         </IconButton>
@@ -194,12 +189,8 @@ function deleteRow(id, e){
      ))}
        </Table>
        </Paper>
-          </Grid>
-        </Grid>
-      </Box>
-    
-
-     </div>
+       </Grid>
+       </div>
   )
 }
 class UploadPreview extends React.Component {

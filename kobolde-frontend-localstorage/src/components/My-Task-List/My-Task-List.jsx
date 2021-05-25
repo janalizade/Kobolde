@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
 import "./my-task-list.css";
-import { Offline, Online } from "react-detect-offline"
 import axios from 'axios';
 import { base64StringToBlob } from 'blob-util';
 import {
@@ -15,24 +14,37 @@ import {
 } from "@material-ui/core";
 import logo from '../My-Task-List/logo.png';
 import { withStyles } from "@material-ui/core/styles";
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import formData from 'form-data';
 import Resizer from 'react-image-file-resizer';
-import { ThreeSixty } from "@material-ui/icons";
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
+import { CircularProgress} from '@material-ui/core';
+import ColoredLinearProgress from './LineProgress';
+import Card1 from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import IconButton from "@material-ui/core/IconButton";
+import SmileIcon from "@material-ui/icons/Mood";
 
 const styles = theme => ({
- 
+  root_card: {
+    marginTop: theme.spacing(2),
+    maxWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
   paper: {
-    
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+    textField: {
+    marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -40,7 +52,7 @@ const styles = theme => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(2),
   },
   submit: {
     width: '100%',
@@ -68,6 +80,24 @@ const styles = theme => ({
 });
 
 
+function ButtonComponent(props) {
+  const styles = theme => ({button: {
+    backgroundColor:'orange',
+    width: '100%',
+    marginTop: theme.spacing(2),
+   
+   },
+ });
+ 
+  const { onClick, loading} = props;
+   return (
+    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '100%', color: 'green'}} >
+      {loading && <CircularProgress size={14} />}
+      {!loading && 'Sync'}
+    </Button>
+  );
+}
+
 class MyTaskList extends Component {
  
   constructor(props) {
@@ -82,7 +112,8 @@ class MyTaskList extends Component {
       selection : 1,
       categoryItem:[],
       categoryId:"",
-      open:[false]
+      open:[false],
+      loading: false
     };
     
     window.localStorage.clear();
@@ -90,13 +121,46 @@ class MyTaskList extends Component {
    onChange = async (event) => {
     const file = event.target.files[0];
    };
-  
+   onClick = () => {
+    this.setState({ loading: true });
+    setTimeout(() => this.setState({ loading: false }), 3000); //3 seconds
+    let tasklist = JSON.parse(localStorage.getItem("tasklist"));
+     tasklist.map((item, index) => {
+      var formdata =new formData();
+      formdata.append('title',item.task);
+      formdata.append('serialNo',item.serialNo);
+      formdata.append('category_id', this.state.categoryId);
+      const contentType = 'image/png';
+      const data = item.image.split('base64,')[1];
+      const blob = base64StringToBlob(data, contentType);
+        formdata.append('image',blob);
+         var config = {
+          method: 'post',
+          url: 'http://localhost:8000/api/v1/admin/productx',
+          headers: { 
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data : formdata
+        };
+        
+        axios(config)
+         .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    
+    });
+  };
   // on load get the task list
   componentDidMount = () => {
      var status=navigator.onLine;
     if(status) {
-     this.setState({connectionStatus:"online"});
+      this.setState({connectionStatus:"online"}); 
+     
      }else{
+      
       this.setState({connectionStatus:"offline"});
       }
      this.getTasks();
@@ -155,41 +219,7 @@ class MyTaskList extends Component {
     });
   };
  
-   
-onSync=()=>{
-  let tasklist = JSON.parse(localStorage.getItem("tasklist"));
-     tasklist.map((item, index) => {
-      var formdata =new formData();
-      formdata.append('title',item.task);
-      formdata.append('serialNo',item.serialNo);
-      formdata.append('category_id', this.state.categoryId);
-      const contentType = 'image/png';
-      const data = item.image.split('base64,')[1];
-      const blob = base64StringToBlob(data, contentType);
-        formdata.append('image',blob);
-         var config = {
-          method: 'post',
-          url: 'http://localhost:8000/api/v1/admin/productx',
-          headers: { 
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          data : formdata
-        };
-        
-        axios(config)
-         .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    
-    });
-  }
-  
-
-
-  // add task to the list
+    // add task to the list
   onSubmit = () => {
 
     // check is task is empty string
@@ -238,6 +268,7 @@ onSync=()=>{
 
   // get all the tasks
   getTasks = () => {
+    const { classes } = this.props;
     // get the task list from the local storage
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
     console.log(tasklist);
@@ -273,41 +304,54 @@ onSync=()=>{
             taskComplete["textDecoration"] = "line-through";
           }
           return (
-        
-            <Card key={index} color={color} fluid style={cardBackground}>
-              <Card.Content>
-                <Card.Header textAlign="left" style={taskComplete}>
-                  <div style={{ wordWrap: "break-word" }}>motor : {item.task}</div>
-                  <div style={{ wordWrap: "break-word" }}>category: {item.category}</div>
-                  <div style={{ wordWrap: "break-word" }}>serialNo:{item.serialNo}</div>
-                  <img style={{ width: "40%" }} src={item.image}/>
-                </Card.Header>
-
-                <Card.Meta textAlign="right">
-                  <Icon
-                    link
-                    name="check circle"
-                    color="green"
-                    onClick={() => this.updateTask(index)}
-                  />
-                  <span style={{ paddingRight: 10 }}>Done</span>
-                  <Icon
-                    link
-                    name="undo"
-                    color="yellow"
-                    onClick={() => this.undoTask(index)}
-                  />
-                  <span style={{ paddingRight: 10 }}>Undo</span>
-                  <Icon
-                    link
-                    name="delete"
-                    color="red"
-                    onClick={() => this.deleteTask(index)}
-                  />
-                  <span style={{ paddingRight: 10 }}>Delete</span>
-                </Card.Meta>
-              </Card.Content>
-            </Card>
+            <Card1 className={classes.root_card}> 
+             <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image={item.image}
+          
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+          {item.task}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+          {item.category}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+          {item.serialNo}
+          </Typography>
+         </CardContent>
+         </CardActionArea>
+        <CardActions>
+        <Icon
+         link
+         name="check circle"
+         color="green"
+         onClick={() => this.updateTask(index)}
+         />
+         <span style={{ paddingRight: 10 }}>Done</span>
+        <Icon
+         link
+         name="undo"
+         color="yellow"
+         onClick={() => this.undoTask(index)}
+         />
+        <span style={{ paddingRight: 10 }}>Undo</span>
+        <Icon
+         link
+         name="delete"
+         color="red"
+         onClick={() => this.deleteTask(index)}
+        />
+        <span style={{ paddingRight: 10 }}>Delete</span>      
+      </CardActions>
+            
+            
+            
+            
+            </Card1>
+           
           
           );
         })
@@ -356,32 +400,21 @@ onSync=()=>{
     return (
       
       <div className={classes.form}>
-      <Box mt={7} px={8}>
-      <Grid container spacing={6}
-        direction="row"
-        justify="center"
-        alignItems="center">
-        <Grid item xs={12} sm={4} md={6} lg={5}>
-         <Paper className={classes.paper}>
+      <Grid container spacing={3}
+        direction="row">
+          <Paper className={classes.paper}>
           <Typography variant="h3" gutterBottom>
             <img src={logo}/>
           </Typography>
-        
-       
-          <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
-         
-          
+            <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
             <FormControl className={classes.formControl}>
-      
-             <NativeSelect
+            <NativeSelect
               id="demo-controlled-open-select"
               open={this.open}
               onClose={this.handleClose}
               onOpen={this.handleOpen}
               onChange={this.handleChange}
-              
             >
-               
             {this.state.categoryItem.map(item =>(
               <option value={item._id}>
                 {item.title }
@@ -389,53 +422,56 @@ onSync=()=>{
               
             ))}
             </ NativeSelect>
+          
+
+
+
 
 
             <Form  onSubmit={this.onSubmit}>
-
-         
             <Input
               type="text"
               name="task"
               onChange={this.onChange}
               value={this.state.task}
               fluid
+              className={classes.textField}
               placeholder="motor..."
             />
-         
             <Input
               type="text"
               name="serialNo"
               onChange={this.onChange}
               value={this.state.serialNo}
+              className={classes.textField}
               fluid
               placeholder="serialNo..."
             />
               <input type="file" name="file"  onChange={this.fileChangedHandler} />
-              
-                                      
-        <div className={classes.root}>
-        <MuiThemeProvider >
-         <DropDownMenu 
-          value={this.state.selection} 
-          
-         >
-          <MenuItem value={1} primaryText="Lägg till list"   onClick={this.onSubmit}/>
-          <MenuItem value={2} primaryText="Sync" onClick={this.onSync} />
-          
-        </DropDownMenu>
-        <br/><br/><br/>
-    
-        </MuiThemeProvider>
-        </div>        
-          <Card.Group className={classes.paper}>{this.state.tasklist}</Card.Group>
+              <Button
+                 type="submit"
+                 fullWidth
+                 variant="contained"
+                 color="primary"
+                 onClick={this.onSubmit}
+                 className={classes.button} >
+                Lägg till ny Produkt
+                </Button>             
+                <React.Fragment>
+                {this.state.loading && <ColoredLinearProgress />}
+                <br />
+                <ButtonComponent onClick={this.onClick} loading={this.state.loading} />
+                </React.Fragment>
       
         </Form>
         </FormControl>
       </Paper>
       </Grid>
-      </Grid>
-      </Box>
+        <Grid item xs={12} sm={9} md={9} lg={9}>
+        <Card.Group className={classes.paper}>{this.state.tasklist}</Card.Group>
+        </Grid>
+     
+    
       </div>
     );
   }
