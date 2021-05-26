@@ -25,8 +25,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from "@material-ui/core/IconButton";
-import SmileIcon from "@material-ui/icons/Mood";
 
 const styles = theme => ({
   root_card: {
@@ -41,22 +39,23 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-    textField: {
-    marginTop: theme.spacing(2),
+    Field: {
+    marginTop: theme.spacing(1),
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+    width: '90%',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(2),
+    width: '85%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
   },
   submit: {
-    width: '100%',
-    marginTop: theme.spacing(2),
+    width: '90%',
+    marginTop: theme.spacing(1),
     
   },
   root: {
@@ -73,25 +72,17 @@ const styles = theme => ({
   },
   button: {
    backgroundColor:'orange',
-   width: '100%',
-   marginTop: theme.spacing(2),
+   width: '90%',
+   marginTop: theme.spacing(1),
   
   },
 });
 
 
 function ButtonComponent(props) {
-  const styles = theme => ({button: {
-    backgroundColor:'orange',
-    width: '100%',
-    marginTop: theme.spacing(2),
-   
-   },
- });
- 
   const { onClick, loading} = props;
    return (
-    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '100%', color: 'green'}} >
+    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '90%', color: 'green',marginTop:6}} >
       {loading && <CircularProgress size={14} />}
       {!loading && 'Sync'}
     </Button>
@@ -125,6 +116,7 @@ class MyTaskList extends Component {
     this.setState({ loading: true });
     setTimeout(() => this.setState({ loading: false }), 3000); //3 seconds
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
+    if(tasklist){
      tasklist.map((item, index) => {
       var formdata =new formData();
       formdata.append('title',item.task);
@@ -152,7 +144,7 @@ class MyTaskList extends Component {
         });
     
     });
-  };
+  }};
   // on load get the task list
   componentDidMount = () => {
      var status=navigator.onLine;
@@ -346,9 +338,7 @@ class MyTaskList extends Component {
         />
         <span style={{ paddingRight: 10 }}>Delete</span>      
       </CardActions>
-            
-            
-            
+       
             
             </Card1>
            
@@ -400,17 +390,19 @@ class MyTaskList extends Component {
     return (
       
       <div className={classes.form}>
-      <Grid container spacing={3}
+        
+      <Grid container spacing={2}
         direction="row">
           <Paper className={classes.paper}>
           <Typography variant="h3" gutterBottom>
-            <img src={logo}/>
+           
           </Typography>
             <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
             <FormControl className={classes.formControl}>
             <NativeSelect
               id="demo-controlled-open-select"
               open={this.open}
+              className={classes.Field}
               onClose={this.handleClose}
               onOpen={this.handleOpen}
               onChange={this.handleChange}
@@ -429,25 +421,25 @@ class MyTaskList extends Component {
 
 
             <Form  onSubmit={this.onSubmit}>
-            <Input
+            <TextField
               type="text"
               name="task"
               onChange={this.onChange}
               value={this.state.task}
               fluid
-              className={classes.textField}
+              className={classes.Field}
               placeholder="motor..."
             />
-            <Input
+            <TextField
               type="text"
               name="serialNo"
               onChange={this.onChange}
               value={this.state.serialNo}
-              className={classes.textField}
+              className={classes.Field}
               fluid
               placeholder="serialNo..."
             />
-              <input type="file" name="file"  onChange={this.fileChangedHandler} />
+              <input type="file" name="file"  onChange={this.fileChangedHandler}className={classes.Field} />
               <Button
                  type="submit"
                  fullWidth
@@ -460,7 +452,7 @@ class MyTaskList extends Component {
                 <React.Fragment>
                 {this.state.loading && <ColoredLinearProgress />}
                 <br />
-                <ButtonComponent onClick={this.onClick} loading={this.state.loading} />
+                <ButtonComponent onClick={this.onClick} loading={this.state.loading}className={classes.Field} />
                 </React.Fragment>
       
         </Form>

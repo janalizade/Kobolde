@@ -18,6 +18,7 @@ class ColoredLinearProgress extends Component {
 }
 
 const styles = {
+  width:"60%",
   colorPrimary: {
     backgroundColor: '#e8eaf6'
   },
