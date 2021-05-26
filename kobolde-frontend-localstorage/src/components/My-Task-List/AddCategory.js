@@ -10,7 +10,7 @@ import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import logo from '../My-Task-List/logo.png';
+import logo from '../My-Task-List/kobolde-logo.png';
 import {
     Button,
     TextField,
@@ -22,10 +22,17 @@ import {
   import axios from 'axios';
   //import ItemList from './ItemList';
 import { DeleteIcon } from '@material-ui/icons/Delete';
+import { CallMissedSharp } from "@material-ui/icons";
 
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    img:{
+      flex: 1,
+      width: 90,
+      height: 90,
+      resizeMode: 'contain'
+    },
     root: {
       width: '80%',
       marginTop: theme.spacing(15),
@@ -108,8 +115,6 @@ export default function Category(props) {
           console.log(error)
       }); 
      };
-
-
 function deleteRow(id, e){ 
   setCategories(''); 
     axios.delete(`http://localhost:8000/api/v1/admin/category/${id}`)  
@@ -121,18 +126,14 @@ function deleteRow(id, e){
      setCategoryItem(categories);
      })
      })  
-     
-     
- }  
- 
-
-  return (
+    }  
+   return (
     <div className={classes.form}>
     <Grid container spacing={3}
       direction="row">
         <Paper className={classes.paper}>
-        <Typography variant="h3" gutterBottom>
-          <img src={logo}/>
+        <Typography variant="h1" gutterBottom>
+        
         </Typography>
               <form onSubmit={handleSubmit(onSubmit)} className={classes.container}>
               <Controller
@@ -148,8 +149,8 @@ function deleteRow(id, e){
                     label="Kategori"
                     required
                 />
-            )}
-         />  
+                )}
+              />  
             
                 <Button
                  type="submit"
@@ -172,19 +173,14 @@ function deleteRow(id, e){
        <TableCell>Handling</TableCell> 
        </TableRow>
        </TableHead>
-
-         {categoryItem.map(item =>(
-           
+            {categoryItem.map(item =>(
         <TableRow>
         <TableCell>{item.title}</TableCell>
         <TableCell>
         <IconButton aria-label="delete" className={classes.margin}  color="secondary">
         <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
         </IconButton>
-                  
-      
-        
-       </TableCell>   
+        </TableCell>   
        </TableRow>
      ))}
        </Table>

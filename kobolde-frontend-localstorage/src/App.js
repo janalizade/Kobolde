@@ -31,22 +31,18 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import { AddAlert } from '@material-ui/icons';
 import AddCategory from './components/My-Task-List/AddCategory'
 import AddProduct from "./components/My-Task-List";
-import logo from './components/My-Task-List/logo.png';
+import Products from "./components/My-Task-List/Products";
+import logo from './components/My-Task-List/kobolde-logo.png';
+import '@fontsource/roboto';
 import {
-
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
-
 //import Deposits from './Deposits';
 //import Orders from './Orders';
-
-
-
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -125,7 +121,6 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -136,7 +131,6 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
   return (
     <Router>
     <div className={classes.root}>
@@ -148,12 +142,15 @@ export default function Dashboard() {
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-          
+          <img src={logo} style={{
+            marginTop:8,
+         width: 30,
+         height: 30,
+        }}/> kobolde Company
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -167,8 +164,7 @@ export default function Dashboard() {
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
-        open={open}
-      >
+        open={open}>
         <div className={classes.toolbarIcon}>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
@@ -201,12 +197,14 @@ export default function Dashboard() {
        <ListItemText primary="Produkt" />
       </ListItem>
       </Link>
+      <Link to="/report">
        <ListItem button>
          <ListItemIcon>
            <BarChartIcon />
          </ListItemIcon>
        <ListItemText primary="Raport" />
        </ListItem>
+       </Link>
      </div>
      </List>
         <Divider />
@@ -215,8 +213,7 @@ export default function Dashboard() {
          <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            
+          <Grid container spacing={3}>        
             {/* Recent Deposits */}
             <Grid item xs={12} sm={9} md={9} lg={9}>
              <Switch>
@@ -225,6 +222,9 @@ export default function Dashboard() {
                </Route>
                <Route path="/product">
                <Product />
+               </Route>
+               <Route path="/report">
+               <Report />
                </Route>
                <Route path="/">
                 <Home />
@@ -236,8 +236,7 @@ export default function Dashboard() {
         </Container>
       </main>
     </div>
- 
-    </Router>
+     </Router>
   );
  
 }
@@ -249,4 +248,7 @@ function Category() {
 }
 function Product() {
   return <AddProduct />;
+}
+function Report() {
+  return <Products />;
 }

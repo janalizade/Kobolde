@@ -41,13 +41,17 @@ const styles = theme => ({
   },
     Field: {
     marginTop: theme.spacing(1),
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
     width: '90%',
+    align:'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
+  },
+  container: {
+    flexWrap: 'wrap',
   },
   form: {
     width: '85%', // Fix IE 11 issue.
@@ -55,6 +59,8 @@ const styles = theme => ({
   },
   submit: {
     width: '90%',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
     marginTop: theme.spacing(1),
     
   },
@@ -71,8 +77,10 @@ const styles = theme => ({
     marginTop:350,
   },
   button: {
-   backgroundColor:'orange',
+  
    width: '90%',
+   marginLeft: theme.spacing(2),
+   marginRight: theme.spacing(2),
    marginTop: theme.spacing(1),
   
   },
@@ -82,7 +90,7 @@ const styles = theme => ({
 function ButtonComponent(props) {
   const { onClick, loading} = props;
    return (
-    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '90%', color: 'green',marginTop:6}} >
+    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '90%',  backgroundColor: 'orange',marginTop:6,marginLeft:15}} >
       {loading && <CircularProgress size={14} />}
       {!loading && 'Sync'}
     </Button>
@@ -150,7 +158,7 @@ class MyTaskList extends Component {
      var status=navigator.onLine;
     if(status) {
       this.setState({connectionStatus:"online"}); 
-     
+       
      }else{
       
       this.setState({connectionStatus:"offline"});
@@ -240,13 +248,9 @@ class MyTaskList extends Component {
       };
     
       // add the task to the task list
-
       tasklist.push(task);
-
       // save the task list in the local storage
-    
       localStorage.setItem("tasklist", JSON.stringify(tasklist));
-
       // clear the form
       this.setState({ task: "" });
       this.setState({category:""});
@@ -420,7 +424,7 @@ class MyTaskList extends Component {
 
 
 
-            <Form  onSubmit={this.onSubmit}>
+            <Form  className={classes.container} onSubmit={this.onSubmit}>
             <TextField
               type="text"
               name="task"
@@ -439,7 +443,7 @@ class MyTaskList extends Component {
               fluid
               placeholder="serialNo..."
             />
-              <input type="file" name="file"  onChange={this.fileChangedHandler}className={classes.Field} />
+              <input type="file" name="file"  onChange={this.fileChangedHandler}style={{width: '90%',marginTop:6,marginLeft:17}} />
               <Button
                  type="submit"
                  fullWidth
