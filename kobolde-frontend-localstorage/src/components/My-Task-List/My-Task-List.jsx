@@ -9,7 +9,8 @@ import {
   Paper,
   Box,
   Typography,
-  Grid
+  Grid,
+  InputLabel
 
 } from "@material-ui/core";
 import logo from '../My-Task-List/kobolde-logo.png';
@@ -30,6 +31,8 @@ import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import IconButton from '@material-ui/core/IconButton';
+import WifiIcon from '@material-ui/icons/Wifi';
+import WifiOffIcon from '@material-ui/icons/WifiOff';
 const styles = theme => ({
   root_card: {
     marginTop: theme.spacing(2),
@@ -81,6 +84,10 @@ const styles = theme => ({
   input: {
     display: 'none',
   },
+  formControl: {
+    width: '100%',
+    margin: theme.spacing(1),
+   },
   button: {
   
    width: '90%',
@@ -261,12 +268,10 @@ class MyTaskList extends Component {
       this.setState({category:""});
       this.setState({serialNo:""});
       this.setState({image:""});
-
-      // refresh the tasks
+     // refresh the tasks
       this.getTasks();
     }
   };
-
   // get all the tasks
   getTasks = () => {
     const { classes } = this.props;
@@ -298,20 +303,19 @@ class MyTaskList extends Component {
           let color = "yellow";
           let cardBackground = { background: "white" };
           let taskComplete = { textDecoration: "none" };
-
           if (item.status) {
             color = "green";
             cardBackground.background = "beige";
             taskComplete["textDecoration"] = "line-through";
           }
           return (
-            <Card1 className={classes.root_card}> 
-             <CardActionArea>
-        <CardMedia
+          <Card1 className={classes.root_card}> 
+          <CardActionArea>
+          <CardMedia
           className={classes.media}
           image={item.image}
-          
-        />
+      
+          />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
           {item.task}
@@ -347,12 +351,9 @@ class MyTaskList extends Component {
         />
         <span style={{ paddingRight: 10 }}>Delete</span>      
       </CardActions>
-       
-            
-            </Card1>
-           
+      </Card1>
+        );
           
-          );
         })
       });
     }
@@ -396,6 +397,12 @@ class MyTaskList extends Component {
 
   render() {
     const { classes } = this.props;
+    const isConnection=this.state.connectionStatus
+    let icon;
+    if(isConnection){
+     icon=<WifiIcon></WifiIcon>
+    }else
+    {icon=<WifiOffIcon></WifiOffIcon>}
     return (
       <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -406,14 +413,11 @@ class MyTaskList extends Component {
         <Typography component="h1" variant="h5">
         Kobolde and partners
         </Typography>
-        <Typography component="h5" variant="h5">
-         <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
-        </Typography>
         <Grid container spacing={2}
         direction="row">
           <Grid item xs={12}>
-          <FormControl className={classes.formControl} variant="outlined">
-             <NativeSelect
+            <FormControl className={classes.formControl} variant="outlined">
+              <NativeSelect
               id="demo-controlled-open-select"
               variant="outlined"
               open={this.open}
@@ -429,6 +433,7 @@ class MyTaskList extends Component {
               
             ))}
             </ NativeSelect>
+            </FormControl>
             <Form  className={classes.container} onSubmit={this.onSubmit}>
             <TextField
               variant="outlined"
@@ -440,7 +445,7 @@ class MyTaskList extends Component {
               onChange={this.onChange}
               value={this.state.task}
               placeholder="motor..."
-            />
+              />
             <TextField
               variant="outlined"
               margin="normal"
@@ -451,14 +456,13 @@ class MyTaskList extends Component {
               onChange={this.onChange}
               value={this.state.serialNo}
               placeholder="serialNo..."
-            />
-        
-        <input accept="image/*" className={classes.input} name="file" id="icon-button-file" type="file" onChange={this.fileChangedHandler}/>
-      <label htmlFor="icon-button-file">
-        <IconButton color="primary" aria-label="upload picture" component="span">
-          <PhotoCamera />
-        </IconButton>
-      </label>
+              />
+              <input accept="image/*" className={classes.input} name="file" id="icon-button-file" type="file" onChange={this.fileChangedHandler}/>
+              <label htmlFor="icon-button-file">
+              <IconButton color="primary" aria-label="upload picture" component="span">
+              <PhotoCamera />
+              </IconButton>
+              </label>
                 <Button
                  variant="outlined"
                  margin="normal"
@@ -480,7 +484,7 @@ class MyTaskList extends Component {
                 </React.Fragment>
       
         </Form>
-        </FormControl>
+        
         </Grid>
         </Grid>
         

@@ -60,8 +60,8 @@ async function getByCategoryId(req, res) {
 
   async function createAll(req, res) {
     console.log("-----------> createAll")
-    
-    let category = Category.findById(req.body.category_id, (err, category) => {
+    let x=req.body.category_id;
+    let category = Category.findById(x, (err, category) => {
       let product = new productModel({
        category: category._id,
        title: req.body.title,
