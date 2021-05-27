@@ -191,7 +191,6 @@ const handleOpen = () => {
           {productItem.map(item =>(
              <TableRow>
              <TableCell>{item.title}</TableCell>
-            
              <TableCell>{item.serialNo}</TableCell>
              <TableCell><img src={item.image} height="50" /></TableCell>
              <TableCell>

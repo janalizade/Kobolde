@@ -1,16 +1,19 @@
 import React from "react";
-import { makeStyles, createStyles} from '@material-ui/core/styles';
+import { makeStyles, createStyles,withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import EditIcon from "@material-ui/icons/EditOutlined";
 import TrashIcon from '@material-ui/icons/DeleteOutlined';
 import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import logo from '../My-Task-List/kobolde-logo.png';
+import Avatar from '@material-ui/core/Avatar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TableContainer from '@material-ui/core/TableContainer';
+import Container from '@material-ui/core/Container';
+import DetailsIcon from '@material-ui/icons/Details';
+import EditIcon from '@material-ui/icons/Edit';
 import {
     Button,
     TextField,
@@ -20,75 +23,58 @@ import {
   } from "@material-ui/core";
   import { useForm, Controller } from "react-hook-form";
   import axios from 'axios';
-  //import ItemList from './ItemList';
-import { DeleteIcon } from '@material-ui/icons/Delete';
-import { CallMissedSharp } from "@material-ui/icons";
-
-
+  
 const useStyles = makeStyles((theme) =>
   createStyles({
-    img:{
-      flex: 1,
-      width: 90,
-      height: 90,
-      resizeMode: 'contain'
-    },
-    root: {
-      width: '80%',
-      marginTop: theme.spacing(15),
-      flexGrow: 1,
-    },
-    paper: {
-      width: '80%',
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-    dense: {
-      marginTop: theme.spacing(20),
-    },
-    menu: {
-      width: 200,
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-      },
-      
-    Table: {
-      width: '70%',
-      backgroundColor: 'orange',
-      maxWidth: 2200,
-      marginTop:350,
-    },
-    extendedIcon: {
-      marginRight: theme.spacing(1),
-    },
-  }),
-);
+paper: {
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  maxWidth: 2200,
+  alignItems: 'center',
+},
+avatar: {
+  margin: theme.spacing(1),
+  backgroundColor: theme.palette.secondary.main,
+},
+form: {
+  width: '100%', // Fix IE 11 issue.
+  marginTop: theme.spacing(3),
+},
+Table: {
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+ },
+submit: {
+  margin: theme.spacing(3, 0, 2),
+},
+}));
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
-
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
 export default function Category(props) {
   const classes = useStyles();
-  const isError = false;
-  const { control, handleSubmit, errors, formState, reset } = useForm({
+   const { control, handleSubmit, errors, formState, reset } = useForm({
     mode: "onChange",
   });
-  const [open, setOpen] = React.useState(false);
-  const[x,setX]=React.useState('');
-  const[categories,setCategories]=React.useState([]);
-
  const [categoryItem,setCategoryItem]=React.useState([]);
+ const[categories,setCategories]=React.useState([]);
  React.useEffect(()=>{
 
      axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
@@ -128,96 +114,74 @@ function deleteRow(id, e){
      })  
     }  
    return (
-    <div className={classes.form}>
-    <Grid container spacing={3}
-      direction="row">
-        <Paper className={classes.paper}>
-        <Typography variant="h1" gutterBottom>
-        
-        </Typography>
-              <form onSubmit={handleSubmit(onSubmit)} className={classes.container}>
-              <Controller
+    <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <div className={classes.paper}>
+      <Avatar className={classes.avatar}>
+      <img src={logo}/> 
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Kobolde and partners
+      </Typography>
+      <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
+        <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Controller
                control={control}
                name="title"
                defaultValue=""
-               style={{ marginTop: 10 }}
-               className={classes.textField}
                render = {({ field})=> (
                 <TextField
                 {...field}
                    fullWidth
+                   variant="outlined"
                     label="Kategori"
                     required
                 />
                 )}
               />  
-            
-                <Button
-                 type="submit"
-                 fullWidth
-                 variant="contained"
-                 color="primary"
-                 className={classes.submit} >
-                Lägg till ny kategori
-                </Button>
-                
-              </form>
-            
-            
-      <Table  >
-       
-           
-       <TableHead className={classes.Table}>
-       <TableRow>
-       <TableCell>Kategorititel</TableCell>
-       <TableCell>Handling</TableCell> 
-       </TableRow>
-       </TableHead>
-            {categoryItem.map(item =>(
-        <TableRow>
-        <TableCell>{item.title}</TableCell>
-        <TableCell>
-        <IconButton aria-label="delete" className={classes.margin}  color="secondary">
-        <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
-        </IconButton>
-        </TableCell>   
-       </TableRow>
-     ))}
-       </Table>
-       </Paper>
-       </Grid>
-       </div>
+          </Grid>
+         </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
+         Lägg till Kategori
+        </Button>
+        </form>
+        <Grid item xs={12}>
+        <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="customized table">
+        <TableHead >
+         <TableRow>
+         <StyledTableCell>Kategorititel</StyledTableCell>
+         <StyledTableCell>Handling</StyledTableCell> 
+         <StyledTableCell>Handling</StyledTableCell> 
+         </TableRow>
+         </TableHead>
+              {categoryItem.map(item =>(
+          <StyledTableRow>
+          <StyledTableCell>{item.title}</StyledTableCell>
+          <StyledTableCell>
+          <IconButton aria-label="delete" className={classes.margin}  color="secondary">
+          <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
+          </IconButton>
+          </StyledTableCell>  
+          <StyledTableCell>
+          <IconButton aria-label="delete" className={classes.margin}  color="secondary">
+          <EditIcon fontSize="small" />
+          </IconButton>
+          </StyledTableCell>
+          </StyledTableRow>
+       ))}
+         </Table>
+         </TableContainer>
+        </Grid>  
+      </div>
+   </Container>
   )
 }
-class UploadPreview extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { file: null };
-      this.onChange = this.onChange.bind(this);
-      this.resetFile = this.resetFile.bind(this);
-    }
-    onChange(event) {
-      this.setState({
-        file: URL.createObjectURL(event.target.files[0])
-      });
-    }
-  
-    resetFile(event) {
-      event.preventDefault();
-      this.setState({ file: null });
-    }
-    render() {
-      return (
-        <div>
-          <input type="file" onChange={this.onChange} />
-          {this.state.file && (
-            <div style={{ textAlign: "center" }}>
-              <button onClick={this.resetFile}>Ta bort Fil</button>
-            </div>
-          )}
-          <img style={{ width: "100%" }} src={this.state.file} />
-        </div>
-      );
-    }
-  }
 
