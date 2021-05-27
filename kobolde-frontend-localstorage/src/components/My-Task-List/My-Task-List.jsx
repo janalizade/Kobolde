@@ -12,7 +12,7 @@ import {
   Grid
 
 } from "@material-ui/core";
-import logo from '../My-Task-List/logo.png';
+import logo from '../My-Task-List/kobolde-logo.png';
 import { withStyles } from "@material-ui/core/styles";
 import formData from 'form-data';
 import Resizer from 'react-image-file-resizer';
@@ -25,7 +25,11 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-
+import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import IconButton from '@material-ui/core/IconButton';
 const styles = theme => ({
   root_card: {
     marginTop: theme.spacing(2),
@@ -35,8 +39,10 @@ const styles = theme => ({
     height: 140,
   },
   paper: {
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
+    maxWidth: 2200,
     alignItems: 'center',
   },
     Field: {
@@ -54,15 +60,11 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   form: {
-    width: '85%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
   },
   submit: {
-    width: '90%',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    marginTop: theme.spacing(1),
-    
+    margin: theme.spacing(3, 0, 2),
   },
   root: {
     width: '100%',
@@ -75,6 +77,9 @@ const styles = theme => ({
     backgroundColor: 'orange',
     maxWidth: 1800,
     marginTop:350,
+  },
+  input: {
+    display: 'none',
   },
   button: {
   
@@ -90,7 +95,7 @@ const styles = theme => ({
 function ButtonComponent(props) {
   const { onClick, loading} = props;
    return (
-    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '90%',  backgroundColor: 'orange',marginTop:6,marginLeft:15}} >
+    <Button variant="contained" onClick={onClick} disabled={loading} style={{width: '100%',  backgroundColor: 'orange'}} >
       {loading && <CircularProgress size={14} />}
       {!loading && 'Sync'}
     </Button>
@@ -392,19 +397,25 @@ class MyTaskList extends Component {
   render() {
     const { classes } = this.props;
     return (
-      
-      <div className={classes.form}>
-        
-      <Grid container spacing={2}
+      <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+        <img src={logo}/> 
+        </Avatar>
+        <Typography component="h1" variant="h5">
+        Kobolde and partners
+        </Typography>
+        <Typography component="h5" variant="h5">
+         <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
+        </Typography>
+        <Grid container spacing={2}
         direction="row">
-          <Paper className={classes.paper}>
-          <Typography variant="h3" gutterBottom>
-           
-          </Typography>
-            <p style={{color: 'green'}}  id='statusCheck'>{this.state.connectionStatus}</p>
-            <FormControl className={classes.formControl}>
-            <NativeSelect
+          <Grid item xs={12}>
+          <FormControl className={classes.formControl} variant="outlined">
+             <NativeSelect
               id="demo-controlled-open-select"
+              variant="outlined"
               open={this.open}
               className={classes.Field}
               onClose={this.handleClose}
@@ -418,57 +429,70 @@ class MyTaskList extends Component {
               
             ))}
             </ NativeSelect>
-          
-
-
-
-
-
             <Form  className={classes.container} onSubmit={this.onSubmit}>
             <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
               type="text"
               name="task"
               onChange={this.onChange}
               value={this.state.task}
-              fluid
-              className={classes.Field}
               placeholder="motor..."
             />
             <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
               type="text"
               name="serialNo"
               onChange={this.onChange}
               value={this.state.serialNo}
-              className={classes.Field}
-              fluid
               placeholder="serialNo..."
             />
-              <input type="file" name="file"  onChange={this.fileChangedHandler}style={{width: '90%',marginTop:6,marginLeft:17}} />
-              <Button
+        
+        <input accept="image/*" className={classes.input} name="file" id="icon-button-file" type="file" onChange={this.fileChangedHandler}/>
+      <label htmlFor="icon-button-file">
+        <IconButton color="primary" aria-label="upload picture" component="span">
+          <PhotoCamera />
+        </IconButton>
+      </label>
+                <Button
+                 variant="outlined"
+                 margin="normal"
+                 fullWidth
                  type="submit"
                  fullWidth
                  variant="contained"
                  color="primary"
                  onClick={this.onSubmit}
-                 className={classes.button} >
+                 className={classes.submit} >
                 Lägg till ny Produkt
                 </Button>             
                 <React.Fragment>
                 {this.state.loading && <ColoredLinearProgress />}
                 <br />
-                <ButtonComponent onClick={this.onClick} loading={this.state.loading}className={classes.Field} />
+                <ButtonComponent   variant="outlined"
+                 margin="normal"
+                 fullWidth onClick={this.onClick} loading={this.state.loading}/>
                 </React.Fragment>
       
         </Form>
         </FormControl>
-      </Paper>
-      </Grid>
+        </Grid>
+        </Grid>
+        
+        
+      
         <Grid item xs={12} sm={9} md={9} lg={9}>
         <Card.Group className={classes.paper}>{this.state.tasklist}</Card.Group>
         </Grid>
      
     
       </div>
+      </Container>
     );
   }
 }

@@ -30,7 +30,6 @@ paper: {
   marginTop: theme.spacing(8),
   display: 'flex',
   flexDirection: 'column',
-  maxWidth: 2200,
   alignItems: 'center',
 },
 avatar: {
