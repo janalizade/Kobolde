@@ -178,11 +178,12 @@ class MyTaskList extends Component {
         //Category List loaded from database
      axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
          const categories=res.data;
-        
          localStorage.setItem("categoryItem", JSON.stringify(categories));
          let categoryItem = JSON.parse(localStorage.getItem("categoryItem")); 
          this.setState({categoryItem:categoryItem});
-         this.setState({categoryId:categoryItem[Object.keys(categoryItem)[0]]._id});
+         if(Object.keys(categoryItem)[0]){
+          this.setState({categoryId:categoryItem[Object.keys(categoryItem)[0]]._id});
+         }
          })
   
     };

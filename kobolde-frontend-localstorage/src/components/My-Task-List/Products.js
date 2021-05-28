@@ -1,19 +1,11 @@
 import React from "react";
 import { makeStyles, createStyles,withStyles} from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import TrashIcon from '@material-ui/icons/DeleteOutlined';
-import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
 import logo from '../My-Task-List/kobolde-logo.png';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TableContainer from '@material-ui/core/TableContainer';
 import Container from '@material-ui/core/Container';
-import DetailsIcon from '@material-ui/icons/Details';
-import EditIcon from '@material-ui/icons/Edit';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -22,16 +14,17 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import {
     Button,
-    TextField,
-    Box,
     Typography,
     Grid,
   } from "@material-ui/core";
-  import { useForm, Controller } from "react-hook-form";
+  import { useForm } from "react-hook-form";
   import axios from 'axios';
-  
 const useStyles = makeStyles((theme) =>
   createStyles({
+card: {
+      marginTop: theme.spacing(2),
+      maxWidth: 345,
+    },
 paper: {
   marginTop: theme.spacing(8),
   display: 'flex',
@@ -59,55 +52,28 @@ submit: {
   margin: theme.spacing(3, 0, 2),
 },
 }));
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
 export default function Products(props) {
-
-
-
-
     const classes = useStyles();
     const { control, handleSubmit, errors, formState, reset } = useForm({
       mode: "onChange",
     });
     const [open, setOpen] = React.useState(false);
-    const[x,setX]=React.useState('');
-    const[file,setFile]=React.useState('');
-    
-  
     const openModal=(e)=>{
       e.preventDefault();
       setOpen(!open);
     };
-  
    const[categoryId,setCategoryId]=React.useState([]);
    const [categoryItem,setCategoryItem]=React.useState([]);
    const[productItem,setProductItem]=React.useState([]);
-   const[productId,setProductId]=React.useState([]);
-   React.useEffect(()=>{
+  React.useEffect(()=>{
        axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
            const categories=res.data;
            setCategoryItem(categories);
-           
-       
+           if(Object.keys(categoryItem)[0]){
+           setCategoryId(categories[Object.keys(categories)[0]]._id);
+          }
           })
    },[]);
-  
     function deleteRow(id,e){
         axios.delete(`http://localhost:8000/api/v1/admin/product/${id}`).then(res=> {
           axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
@@ -118,12 +84,14 @@ export default function Products(props) {
     }
     const searchrow=()=>{  
        console.log("categoryId",categoryId);
-             
-    }  
+      }  
     const onSubmit=(data)=>{
     //  debugger
-      setCategoryId(data.category);
-       axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+    console.log("onclick categoryId",categoryId);
+        setCategoryId(data.category);
+        
+        axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+          console.log("res-data--->",res.data);
         const products=res.data.product;
         setProductItem(products); 
       })
@@ -139,16 +107,13 @@ export default function Products(props) {
      })
     
   };
-  
   const handleClose = () => {
     setOpen(false);
   };
-  
   const handleOpen = () => {
     setOpen(true);
   };
-  
-   return (
+  return (
     <Container component="main" maxWidth="xs">
     <CssBaseline />
     <div className={classes.paper}>
@@ -188,10 +153,9 @@ export default function Products(props) {
          List
         </Button>
         </form>
-      
       </div>
       {productItem.map(item =>(
-             <Card className={classes.root_card}> 
+             <Card className={classes.card}> 
              <CardActionArea>
              <CardMedia
              className={classes.media}
@@ -199,7 +163,7 @@ export default function Products(props) {
              />
              <CardContent>
              <Typography gutterBottom variant="h5" component="h2">
-             Produkt Title:{item.task}
+             Produkt Title:{item.title}
              </Typography>
              <Typography variant="body2" color="textSecondary" component="p">
              Produkt serialNo:{item.serialNo}
@@ -207,7 +171,6 @@ export default function Products(props) {
              </CardContent>
              </CardActionArea>
             <CardActions>
-            
             <IconButton aria-label="delete" className={classes.margin}  color="secondary">
             <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
             </IconButton>
