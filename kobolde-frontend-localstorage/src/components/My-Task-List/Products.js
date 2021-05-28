@@ -1,19 +1,25 @@
 import React from "react";
-import { makeStyles, createStyles} from '@material-ui/core/styles';
+import { makeStyles, createStyles,withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import EditIcon from "@material-ui/icons/EditOutlined";
+import TrashIcon from '@material-ui/icons/DeleteOutlined';
 import Table from '@material-ui/core/Table';
 import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import logo from '../My-Task-List/kobolde-logo.png';
+import Avatar from '@material-ui/core/Avatar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TableContainer from '@material-ui/core/TableContainer';
+import Container from '@material-ui/core/Container';
+import DetailsIcon from '@material-ui/icons/Details';
+import EditIcon from '@material-ui/icons/Edit';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import TrashIcon from '@material-ui/icons/DeleteOutlined';
-
-//import ProductCard from '../Admin/ProductCard'
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import {
     Button,
     TextField,
@@ -23,146 +29,142 @@ import {
   } from "@material-ui/core";
   import { useForm, Controller } from "react-hook-form";
   import axios from 'axios';
-  //import ItemList from './ItemList';
-  import MenuItem from '@material-ui/core/MenuItem';
-import { DeleteIcon } from '@material-ui/icons/Delete';
+  
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {
-      marginTop: theme.spacing(30),
-      flexGrow: 1,
+paper: {
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+},
+avatar: {
+  margin: theme.spacing(1),
+  backgroundColor: theme.palette.secondary.main,
+},
+form: {
+  width: '100%', // Fix IE 11 issue.
+  marginTop: theme.spacing(3),
+},
+media: {
+  height: 140,
+},
+Table: {
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+ },
+submit: {
+  margin: theme.spacing(3, 0, 2),
+},
+}));
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
     },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-    dense: {
-      marginTop: theme.spacing(20),
-    },
-    menu: {
-      width: 200,
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-      },
-      
-    button: {
-        width:40,
-        height:20,
-        margin : theme.spacing(3,0,2),  
-    },
-    Table: {
-      width: '100%',
-      backgroundColor: 'orange',
-      maxWidth: 2200,
-      marginTop:350,
-    },
-    extendedIcon: {
-      marginRight: theme.spacing(1),
-    },
-  }),
-);
+  },
+}))(TableRow);
+export default function Products(props) {
 
 
-export default function Product(props) {
-  const classes = useStyles();
-  const { control, handleSubmit, errors, formState, reset } = useForm({
-    mode: "onChange",
-  });
-  const [open, setOpen] = React.useState(false);
-  const[x,setX]=React.useState('');
-  const[file,setFile]=React.useState('');
+
+
+    const classes = useStyles();
+    const { control, handleSubmit, errors, formState, reset } = useForm({
+      mode: "onChange",
+    });
+    const [open, setOpen] = React.useState(false);
+    const[x,setX]=React.useState('');
+    const[file,setFile]=React.useState('');
+    
   
-
-  const openModal=(e)=>{
-    e.preventDefault();
-    setOpen(!open);
-  };
-
- const[categoryId,setCategoryId]=React.useState([]);
- const [categoryItem,setCategoryItem]=React.useState([]);
- const[productItem,setProductItem]=React.useState([]);
- const[productId,setProductId]=React.useState([]);
- React.useEffect(()=>{
-     axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
-         const categories=res.data;
-         setCategoryItem(categories);
-     
-        })
- },[]);
-
-  function deleteRow(id,e){
-      axios.delete(`http://localhost:8000/api/v1/admin/product/${id}`).then(res=> {
-        axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
-          const products=res.data.product;
-          setProductItem(products); 
-        })
-    })
-  }
-
-  const searchrow=()=>{  
-     console.log("categoryId",categoryId);
+    const openModal=(e)=>{
+      e.preventDefault();
+      setOpen(!open);
+    };
+  
+   const[categoryId,setCategoryId]=React.useState([]);
+   const [categoryItem,setCategoryItem]=React.useState([]);
+   const[productItem,setProductItem]=React.useState([]);
+   const[productId,setProductId]=React.useState([]);
+   React.useEffect(()=>{
+       axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+           const categories=res.data;
+           setCategoryItem(categories);
            
-  }  
-
-  const onSubmit=(data)=>{
-  //  debugger
-    setCategoryId(data.category);
-     axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
-      const products=res.data.product;
-      setProductItem(products); 
-    })
-  }
-  const handleChange = (event) => {
-    setCategoryId('');
-    setCategoryId(event.target.value);
-    axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
-     const products=res.data.product;
-     setProductItem(products); 
-   })
+       
+          })
+   },[]);
   
-};
-
-const handleClose = () => {
-  setOpen(false);
-};
-
-const handleOpen = () => {
-  setOpen(true);
-};
-
-  return (
-    <div className={classes.root}>
-      <Box mt={5} px={3}>
-        <Grid container spacing={3}
-          direction="row"
-          justify="center"
-          alignItems="center">
-          <Grid item xs={12} sm={8} md={6} lg={5}>
-            <Paper className={classes.paper}>
-            <Typography variant="h3" gutterBottom>
+    function deleteRow(id,e){
+        axios.delete(`http://localhost:8000/api/v1/admin/product/${id}`).then(res=> {
+          axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+            const products=res.data.product;
+            setProductItem(products); 
+          })
+      })
+    }
+    const searchrow=()=>{  
+       console.log("categoryId",categoryId);
              
-               </Typography>
-            <form onSubmit={handleSubmit(onSubmit)}>
-            <InputLabel id="demo-controlled-open-select-label">Produkts</InputLabel>
-            <FormControl  className={classes.formControl} >
-           
-                  <NativeSelect
+    }  
+    const onSubmit=(data)=>{
+    //  debugger
+      setCategoryId(data.category);
+       axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+        const products=res.data.product;
+        setProductItem(products); 
+      })
+    }
+    const handleChange = (event) => {
+      setCategoryId('');
+      setCategoryId(event.target.value);
+      console.log("categoryId",event.target.value);
+      axios.get('http://localhost:8000/api/v1/admin/productx/${categoryId}').then(res=> {
+         console.log(res.data);
+       const products=res.data.product;
+      setProductItem(products); 
+     })
+    
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  
+   return (
+    <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <div className={classes.paper}>
+      <Avatar className={classes.avatar}>
+      <img src={logo}/> 
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Kobolde and partners
+      </Typography>
+      <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
+        <Grid container spacing={2}>
+        <Grid item xs={12}>
+        <NativeSelect
                   id="demo-controlled-open-select"
                   open={open}
-                  className={classes.Field}
+                  className={classes.form}
                   onClose={handleClose}
                   onOpen={handleOpen}
                   onChange={handleChange}
@@ -174,76 +176,46 @@ const handleOpen = () => {
                   
                 ))}
                 </ NativeSelect>
-                  
-                
-       <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} > List </Button>
-        <Table>
-          <TableHead className={classes.Table}>
-          <TableRow>
-            <TableCell>titel</TableCell>
-            <TableCell>SerialNo</TableCell>
-            <TableCell>bild</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-          </TableHead>
-
-
-          {productItem.map(item =>(
-             <TableRow>
-             <TableCell>{item.title}</TableCell>
-             <TableCell>{item.serialNo}</TableCell>
-             <TableCell><img src={item.image} height="50" /></TableCell>
-             <TableCell>
-             <IconButton aria-label="delete" className={classes.margin}  color="secondary">
-             <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
-             </IconButton>
-           </TableCell>
-           </TableRow>
-             ))}
-        </Table>
-      </FormControl>
-        </form>  
-           </Paper>
           </Grid>
-        </Grid>
-      </Box>
-    
-
-     </div>
+         </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
+         List
+        </Button>
+        </form>
+      
+      </div>
+      {productItem.map(item =>(
+             <Card className={classes.root_card}> 
+             <CardActionArea>
+             <CardMedia
+             className={classes.media}
+             image={item.image}
+             />
+             <CardContent>
+             <Typography gutterBottom variant="h5" component="h2">
+             Produkt Title:{item.task}
+             </Typography>
+             <Typography variant="body2" color="textSecondary" component="p">
+             Produkt serialNo:{item.serialNo}
+             </Typography>
+             </CardContent>
+             </CardActionArea>
+            <CardActions>
+            
+            <IconButton aria-label="delete" className={classes.margin}  color="secondary">
+            <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
+            </IconButton>
+           <span style={{ paddingRight: 10 }}>Delete</span>      
+         </CardActions>
+         </Card>
+             ))}
+   </Container>
   )
 }
 
-
-class UploadPreview extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { file: null };
-      this.onChange = this.onChange.bind(this);
-      this.resetFile = this.resetFile.bind(this);
-    }
-    onChange(event) {
-      this.setState({
-        file: URL.createObjectURL(event.target.files[0])
-      });
-    }
-  
-    resetFile(event) {
-      event.preventDefault();
-      this.setState({ file: null });
-    }
-    render() {
-      return (
-        <div>
-          <input type="file" onChange={this.onChange} />
-          {this.state.file && (
-            <div style={{ textAlign: "center" }}>
-              <button onClick={this.resetFile}>Ta bort Fil</button>
-            </div>
-          )}
-          <img style={{ width: "100%" }} src={this.state.file} />
-          <div> {this.state.file}</div>
-        </div>
-        
-      );
-    }
-  }

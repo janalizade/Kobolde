@@ -138,6 +138,7 @@ class MyTaskList extends Component {
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
     if(tasklist){
      tasklist.map((item, index) => {
+       console.log("tasklist",tasklist);
       var formdata =new formData();
       formdata.append('title',item.task);
       formdata.append('serialNo',item.serialNo);
@@ -170,22 +171,19 @@ class MyTaskList extends Component {
      var status=navigator.onLine;
     if(status) {
       this.setState({connectionStatus:"online"}); 
-       
-     }else{
-      
-      this.setState({connectionStatus:"offline"});
+       }else{
+       this.setState({connectionStatus:"offline"});
       }
      this.getTasks();
-     
-     
-     //Category List loaded from database
+        //Category List loaded from database
      axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
          const categories=res.data;
+        
          localStorage.setItem("categoryItem", JSON.stringify(categories));
          let categoryItem = JSON.parse(localStorage.getItem("categoryItem")); 
          this.setState({categoryItem:categoryItem});
-         console.log("categoryItem---->",categoryItem);
-        })
+         this.setState({categoryId:categoryItem[Object.keys(categoryItem)[0]]._id});
+         })
   
     };
   
@@ -196,9 +194,7 @@ class MyTaskList extends Component {
    handleOpen = () => {
     this.setState({open:true});
     };
-      
-
-  fileChangedHandler=(event)=> {
+   fileChangedHandler=(event)=> {
     var fileInput = false
     if(event.target.files[0]) {
         fileInput = true
@@ -230,10 +226,8 @@ class MyTaskList extends Component {
       [event.target.name]: event.target.value
     });
   };
- 
-    // add task to the list
+     // add task to the list
   onSubmit = () => {
-
     // check is task is empty string
     if (this.state.task) {
       // get the task list from the local storage
@@ -244,11 +238,9 @@ class MyTaskList extends Component {
       if (tasklist == null) {
         tasklist = [];
       }
-
       // create task object
       // default status is false
-  
-      
+    
       
       let task = {
         
@@ -309,7 +301,7 @@ class MyTaskList extends Component {
             taskComplete["textDecoration"] = "line-through";
           }
           return (
-          <Card1 className={classes.root_card}> 
+          <Card1 key={index} color={color} fluid style={cardBackground} className={classes.root_card}> 
           <CardActionArea>
           <CardMedia
           className={classes.media}
@@ -318,13 +310,10 @@ class MyTaskList extends Component {
           />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-          {item.task}
+          Produkt Title:{item.task}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-          {item.category}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-          {item.serialNo}
+          Produkt serialNo:{item.serialNo}
           </Typography>
          </CardContent>
          </CardActionArea>
@@ -361,6 +350,7 @@ class MyTaskList extends Component {
 
   // update the task status to true
   updateTask = index => {
+    
     // get the task list from the local storage
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
     // change status to true
@@ -484,11 +474,9 @@ class MyTaskList extends Component {
                 </React.Fragment>
       
         </Form>
-        
         </Grid>
         </Grid>
-        
-        
+             
       
         <Grid item xs={12} sm={9} md={9} lg={9}>
         <Card.Group className={classes.paper}>{this.state.tasklist}</Card.Group>

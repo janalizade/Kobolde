@@ -47,9 +47,8 @@ async function getById(req, res) {
 
 async function getByCategoryId(req, res) {
   let categoryId=req.params["id"];
-  console.log(categoryId);
+  console.log("categoryId",categoryId);
   productModel.find({category: categoryId}).then(product =>{
-    console.log(product);
     if(product) {
          return res.status(200).json({success: true, product})
     } else {
@@ -61,6 +60,7 @@ async function getByCategoryId(req, res) {
   async function createAll(req, res) {
     console.log("-----------> createAll")
     let x=req.body.category_id;
+    console.log("category_id",x);
     let category = Category.findById(x, (err, category) => {
       let product = new productModel({
        category: category._id,
@@ -68,7 +68,7 @@ async function getByCategoryId(req, res) {
         image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
         serialNo:req.body.serialNo,
      });
- 
+     console.log("product",product);
      product.save(err => {
        if (err) throw err;
        category.products.push(product._id);
@@ -80,20 +80,6 @@ async function getByCategoryId(req, res) {
      });
    });
  }
-    /*try {
-      let product = new productModel({
-        title: req.body.title,
-        image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
-        serialNo:req.body.serialNo,
-      });
-      console.log("----------->"+ product.image);
-      await product.save();
-      res.json({ message: "Product added" });
-    } catch (error) {
-      console.log(error.message);
-      res.status(400).json({ message: '${error.message}' });
-    }
-  }*/
    
 
 async function create(req, res) {
