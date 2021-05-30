@@ -66,7 +66,7 @@ export default function Products(props) {
    const [categoryItem,setCategoryItem]=React.useState([]);
    const[productItem,setProductItem]=React.useState([]);
   React.useEffect(()=>{
-       axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+       axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
            const categories=res.data;
            setCategoryItem(categories);
            if(Object.keys(categoryItem)[0]){
@@ -75,8 +75,8 @@ export default function Products(props) {
           })
    },[]);
     function deleteRow(id,e){
-        axios.delete(`http://localhost:8000/api/v1/admin/product/${id}`).then(res=> {
-          axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+        axios.delete(`https://kobolde.ahoora.se:8443/api/v1/admin/product/${id}`).then(res=> {
+          axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}`).then(res=> {
             const products=res.data.product;
             setProductItem(products); 
           })
@@ -90,7 +90,7 @@ export default function Products(props) {
     console.log("onclick categoryId",categoryId);
         setCategoryId(data.category);
         
-        axios.get(`http://localhost:8000/api/v1/admin/productx/${categoryId}`).then(res=> {
+        axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}`).then(res=> {
           console.log("res-data--->",res.data);
         const products=res.data.product;
         setProductItem(products); 
@@ -100,7 +100,7 @@ export default function Products(props) {
       setCategoryId('');
       setCategoryId(event.target.value);
       console.log("categoryId",event.target.value);
-      axios.get('http://localhost:8000/api/v1/admin/productx/${categoryId}').then(res=> {
+      axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}').then(res=> {
          console.log(res.data);
        const products=res.data.product;
       setProductItem(products); 

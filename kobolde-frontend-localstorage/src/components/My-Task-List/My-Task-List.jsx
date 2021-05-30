@@ -149,7 +149,7 @@ class MyTaskList extends Component {
         formdata.append('image',blob);
          var config = {
           method: 'post',
-          url: 'http://localhost:8000/api/v1/admin/productx',
+          url: 'https://kobolde.ahoora.se:8443/api/v1/admin/productx',
           headers: { 
             'Content-Type': 'application/x-www-form-urlencoded'
           },
@@ -176,7 +176,7 @@ class MyTaskList extends Component {
       }
      this.getTasks();
         //Category List loaded from database
-     axios.get('http://localhost:8000/api/v1/admin/category').then(res=>{
+     axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
          const categories=res.data;
          localStorage.setItem("categoryItem", JSON.stringify(categories));
          let categoryItem = JSON.parse(localStorage.getItem("categoryItem")); 
