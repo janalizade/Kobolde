@@ -139,9 +139,11 @@ class MyTaskList extends Component {
     this.setState({ loading: true });
     setTimeout(() => this.setState({ loading: false }), 3000); //3 seconds
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
+    
     if(tasklist){
      tasklist.map((item, index) => {
-       console.log("tasklist",tasklist);
+      if (tasklist[index].status == true){
+      console.log("tasklist",tasklist);
       var formdata =new formData();
       formdata.append('title',item.task);
       formdata.append('serialNo',item.serialNo);
@@ -158,18 +160,18 @@ class MyTaskList extends Component {
           },
           data : formdata
         };
-        
-        axios(config)
+      axios(config)
          .then(function (response) {
           console.log(JSON.stringify(response.data));
         })
+      
         .catch(function (error) {
           Swal.fire( '',
           'Kontrollera ditt internet förbindelse',
           '');
           console.log(error);
         });
-    
+      }
     });
   }
      }
