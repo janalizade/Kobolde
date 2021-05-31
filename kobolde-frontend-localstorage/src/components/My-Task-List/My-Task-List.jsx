@@ -33,6 +33,8 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import IconButton from '@material-ui/core/IconButton';
 import WifiIcon from '@material-ui/icons/Wifi';
 import WifiOffIcon from '@material-ui/icons/WifiOff';
+import Swal from 'sweetalert2'
+
 const styles = theme => ({
   root_card: {
     marginTop: theme.spacing(2),
@@ -133,6 +135,7 @@ class MyTaskList extends Component {
     const file = event.target.files[0];
    };
    onClick = () => {
+     if(this.state.connectionStatus=='online'){
     this.setState({ loading: true });
     setTimeout(() => this.setState({ loading: false }), 3000); //3 seconds
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
@@ -161,11 +164,23 @@ class MyTaskList extends Component {
           console.log(JSON.stringify(response.data));
         })
         .catch(function (error) {
+          Swal.fire( '',
+          'Kontrollera ditt internet förbindelse',
+          '');
           console.log(error);
         });
     
     });
-  }};
+  }
+     }
+     else{
+      Swal.fire(
+        'The Internet?',
+        'Controllera ditt internet förbindelse',
+        'question'
+      )
+     }
+};
   // on load get the task list
   componentDidMount = () => {
      var status=navigator.onLine;

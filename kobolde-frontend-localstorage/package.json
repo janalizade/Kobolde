@@ -24,7 +24,8 @@
     "react-native-image-resizer": "^1.4.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.0",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "sweetalert2": "^11.0.16"
   },
   "scripts": {
     "predeploy": "npm run build",

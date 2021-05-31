@@ -65,17 +65,21 @@ export default function Products(props) {
    const[categoryId,setCategoryId]=React.useState([]);
    const [categoryItem,setCategoryItem]=React.useState([]);
    const[productItem,setProductItem]=React.useState([]);
+   
+   let theArray=[{title:''}]
   React.useEffect(()=>{
-       axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
-           const categories=res.data;
-           setCategoryItem(categories);
-           if(Object.keys(categoryItem)[0]){
-           setCategoryId(categories[Object.keys(categories)[0]]._id);
-          }
-          })
-   },[]);
+      axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
+      const categories=res.data;
+      setCategoryItem(categories);
+      
+      console.log('first  elemtnt -------------->',res.data);
+      setCategoryId(categories[Object.keys(categories)[0]]._id);
+       })},[]);
+ 
     function deleteRow(id,e){
-        axios.delete(`https://kobolde.ahoora.se:8443/api/v1/admin/product/${id}`).then(res=> {
+           axios.delete(`https://kobolde.ahoora.se:8443/api/v1/admin/product/${id}`).then(res=> {
+           console.log("id",id);
+           console.log("categoryId",categoryId);
           axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}`).then(res=> {
             const products=res.data.product;
             setProductItem(products); 
@@ -86,23 +90,20 @@ export default function Products(props) {
        console.log("categoryId",categoryId);
       }  
     const onSubmit=(data)=>{
-    //  debugger
-    console.log("onclick categoryId",categoryId);
-        setCategoryId(data.category);
-        
-        axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}`).then(res=> {
-          console.log("res-data--->",res.data);
+      debugger
+       setCategoryId(data.category);
+       axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}`).then(res=> {
+       console.log("res-data--->",res.data);
         const products=res.data.product;
         setProductItem(products); 
+        setCategoryId(categoryId);
+        
       })
     }
     const handleChange = (event) => {
-      setCategoryId('');
       setCategoryId(event.target.value);
-      console.log("categoryId",event.target.value);
       axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}').then(res=> {
-         console.log(res.data);
-       const products=res.data.product;
+      const products=res.data.product;
       setProductItem(products); 
      })
     

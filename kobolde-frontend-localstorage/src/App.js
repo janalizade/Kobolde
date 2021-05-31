@@ -170,14 +170,14 @@ export default function Dashboard() {
         <List>
         <div>
        <Link to="/">
-       <ListItem button >
+       <ListItem button  className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
          <ListItemIcon >
            <DashboardIcon />
          </ListItemIcon>
        <ListItemText primary="Dashboard" />
        </ListItem>
        </Link>
-       <Link to="/category">
+       <Link to="/category" >
        <ListItem button >
          <ListItemIcon>
            <CategoryIcon/>

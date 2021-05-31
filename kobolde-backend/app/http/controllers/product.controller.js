@@ -50,6 +50,7 @@ async function getByCategoryId(req, res) {
   console.log("categoryId",categoryId);
   productModel.find({category: categoryId}).then(product =>{
     if(product) {
+      console.log(product);
          return res.status(200).json({success: true, product})
     } else {
         return res.status(400).json({success: false , message: "product not found!"})
@@ -65,7 +66,7 @@ async function getByCategoryId(req, res) {
       let product = new productModel({
        category: category._id,
        title: req.body.title,
-        image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
+        image: "https://kobolde.ahoora.se:8443/" + req.file.path.replace(/\\/g, "/"),
         serialNo:req.body.serialNo,
      });
      console.log("product",product);
@@ -88,7 +89,7 @@ async function create(req, res) {
      let product = new productModel({
       category: category._id,
       title: req.body.title,
-      image: "http://localhost:8000/" + req.file.path.replace(/\\/g, "/"),
+      image: "https://kobolde.ahoora.se:8443/" + req.file.path.replace(/\\/g, "/"),
       quantity:req.body.quantity,
       price: req.body.price
     });
@@ -131,6 +132,8 @@ async function update(req, res) {
 
 async function remove(req, res) {
   productModel.findByIdAndRemove(req.params.id, (err, item) => {
+    let x=req.body.category_id;
+    console.log("category_id",x);
     if (err) {
       res.status(500).json({
         message: "Internal Server Error"
