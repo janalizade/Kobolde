@@ -32,7 +32,11 @@ import { AddAlert } from '@material-ui/icons';
 import AddCategory from './components/My-Task-List/AddCategory'
 import AddProduct from "./components/My-Task-List";
 import Products from "./components/My-Task-List/Products";
+import BarCategoryReport from './components/My-Task-List/BarCategoryReport'
+import BarProductReport from './components/My-Task-List/BarProductReport'
 import logo from './components/My-Task-List/kobolde-logo.png';
+import ReportIcon from '@material-ui/icons/Report';
+import ViewListIcon from '@material-ui/icons/ViewList';
 import '@fontsource/roboto';
 import {
   BrowserRouter as Router,
@@ -40,8 +44,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-//import Deposits from './Deposits';
-//import Orders from './Orders';
+
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -196,12 +199,28 @@ export default function Dashboard() {
       <Link to="/report">
        <ListItem button>
          <ListItemIcon>
-           <BarChartIcon />
+           <ViewListIcon/>
          </ListItemIcon>
        <ListItemText primary="Raport" />
        </ListItem>
        </Link>
-     </div>
+       <Link to="/currentKategoryReport">
+       <ListItem button>
+         <ListItemIcon>
+           <BarChartIcon />
+         </ListItemIcon>
+       <ListItemText primary="Kategori Graph Raport" />
+       </ListItem>
+       </Link>
+       <Link to="/currentProductReport">
+       <ListItem button>
+         <ListItemIcon>
+           <BarChartIcon />
+         </ListItemIcon>
+       <ListItemText primary="Product Graph Raport" />
+       </ListItem>
+       </Link>
+      </div>
      </List>
         <Divider />
         <List>{secondaryListItems}</List>
@@ -222,14 +241,19 @@ export default function Dashboard() {
                <Route path="/report">
                <Report />
                </Route>
+               <Route path="/currentKategoryReport">
+               <BarcategoryReport/>
+               </Route>
+               <Route path="/currentProductReport">
+               <BarproductReport />
+               </Route>
                <Route path="/">
                 <Home />
                </Route>
              </Switch>   
             </Grid>
           </Grid>
-       
-        </Container>
+         </Container>
       </main>
     </div>
      </Router>
@@ -247,4 +271,10 @@ function Product() {
 }
 function Report() {
   return <Products />;
+}
+function BarcategoryReport() {
+  return <BarCategoryReport />;
+}
+function BarproductReport () {
+  return <BarProductReport />;
 }

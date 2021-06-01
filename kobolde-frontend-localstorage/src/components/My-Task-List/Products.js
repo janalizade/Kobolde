@@ -90,7 +90,6 @@ export default function Products(props) {
        console.log("categoryId",categoryId);
       }  
     const onSubmit=(data)=>{
-      debugger
        setCategoryId(data.category);
        axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${categoryId}`).then(res=> {
        console.log("res-data--->",res.data);

@@ -12,6 +12,7 @@ module.exports = {
   remove,
   createAll,
   getByCategoryId,
+
 };
 
 async function getAll(req, res) {

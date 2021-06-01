@@ -26,6 +26,7 @@ router.post("/category", CategoryController.create);
 router.get("/health", CategoryController.health);
 router.get("/category", CategoryController.getAll);
 router.get("/category/:id", CategoryController.getById);
+router.get("/categoryx/:title", CategoryController.getByCategoryTilte);
 router.patch("/category/:id", CategoryController.update);
 router.delete("/category/:id", CategoryController.remove);
 

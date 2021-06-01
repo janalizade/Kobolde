@@ -11,6 +11,7 @@ module.exports = {
   update,
   remove,
   health,
+  getByCategoryTilte,
 };
 
 async function health(req, res) {
@@ -33,6 +34,20 @@ async function getAll(req, res) {
   });
 }
 
+async function getByCategoryTilte(req, res) {
+  let categoryTitle=req.params["title"];
+   categoryModel.find({title: categoryTitle}).then(category =>{
+    if(category) {
+    
+         return res.status(200).json({success: true, category})
+        
+    } else {
+        return res.status(400).json({success: false , message: "product not found!"})
+    }
+  }
+  )}
+
+
 async function getById(req, res) {
   let categoryId=req.params["id"];
   let category=await (await categoryModel.findById(categoryId));
@@ -41,18 +56,6 @@ async function getById(req, res) {
     if (category) {
       return res.status(200).json(category);
     }
-  /*(await categoryModel.findById(req.params.id)) => {
-    if (err) {
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-    if (category) {
-      return res.status(200).json(category);
-    }
-    res.json({
-      message: "موردی جهت نمایش وجود ندارد",
-      success: false,
-    });
-  });*/
 }
 
 async function create(req, res) {
