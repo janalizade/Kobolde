@@ -173,7 +173,7 @@ export default function Dashboard() {
         <List>
         <div>
        <Link to="/">
-       <ListItem button  className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
+       <ListItem button >
          <ListItemIcon >
            <DashboardIcon />
          </ListItemIcon>
