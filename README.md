@@ -24,12 +24,30 @@ sudo service-systemd --remove --service kobolde-frontend
 ---------------------------------------------------------------
 **********************************************************
 npm install react-hook-form
+
+
 npm install @material-ui/icons
+
+
 npm install @material-ui/core 
+
+
 npm install -g sass    
+
+
 npm install bootstrap
+
+
 npm install --save react-chartjs-2 chart.js
+
+
 npm install blob-util
+
+
 npm i react-image-file-resizer
+
+
 npm i semantic-ui-react 
+
+
 npm install --save sweetalert2
