@@ -1,6 +1,7 @@
 import React,{ useState, useEffect }  from "react";
 import ChartistGraph from "react-chartist";
 import { Bar, Line } from 'react-chartjs-2';
+import { useForm, Controller } from "react-hook-form";
 import axios from 'axios';
 // react-bootstrap components
 import {
@@ -20,9 +21,63 @@ import {
 
 function Dashboard() {
   const [data, setData] = useState([]);
+  const [product, setProduct] = useState([]);
+  const { control, handleSubmit, errors, formState, reset } = useForm({
+    mode: "onChange",
+  });
  let title = [];
  let id=[];
  let titleproducts=[];
+ const onSubmit=(data)=>{
+   /*
+  axios.get(`http://localhost:8000/api/v1/admin/categoryx/${data.title}`).then(res=>{
+  const categories=res.data;
+  setCategoryId(categories[Object.keys(categories)]._id);
+  });
+
+  */
+  https://kobolde.ahoora.se:8443/api/v1/admin/productx/${data.title}
+   
+  //axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/productx/${data.title}`)  .then(res=>{
+    axios.get(`https://kobolde.ahoora.se:8443/api/v1/admin/product/`)  .then(res=>{
+    const categories=res.data;
+    
+    
+       categories.forEach(element => {
+         
+        title.push(element.title);
+        id.push(element[Object.keys(element)[0]].length); 
+       
+      });
+    setProduct({
+      Data: {
+        labels: title,
+        datasets: [
+          {
+            label: "IPL 2018/2019 Top Run Scorer",
+            data:id,
+            backgroundColor: [
+              "#3cb371",
+              "#0000FF",
+              "#9966FF",
+              "#4C4CFF",
+              "#00FFFF",
+              "#f990a7",
+              "#aad2ed",
+              "#FF00FF",
+              "Blue",
+              "Red"
+            ]
+          }
+        ]
+      }
+    });
+
+    });
+
+}
+
+ 
  React.useEffect(()=>{
   axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
   const categories=res.data;
@@ -176,7 +231,7 @@ function Dashboard() {
               <Card.Header>
                 <Card.Title as="h4">Produkt Raport</Card.Title>
                 <p className="card-category">
-                  <Form>
+                  <Form  onSubmit={handleSubmit(onSubmit)}>
                   <Row>
                     <Col className="pr-1" md="5">
                       <Form.Group>
@@ -200,56 +255,31 @@ function Dashboard() {
                 </p>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartHours">
-                  <ChartistGraph
-                    data={{
-                      labels: [
-                        "9:00AM",
-                        "12:00AM",
-                        "3:00PM",
-                        "6:00PM",
-                        "9:00PM",
-                        "12:00PM",
-                        "3:00AM",
-                        "6:00AM",
-                      ],
-                      series: [
-                        [id],
-                        [67, 152, 143, 240, 287, 335, 435, 437],
-                        [23, 113, 67, 108, 190, 239, 307, 308],
-                      ],
-                    }}
-                    type="Line"
-                    options={{
-                      low: 0,
-                      high: 800,
-                      showArea: false,
-                      height: "245px",
-                      axisX: {
-                        showGrid: false,
-                      },
-                      lineSmooth: true,
-                      showLine: true,
-                      showPoint: true,
-                      fullWidth: true,
-                      chartPadding: {
-                        right: 50,
-                      },
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
+              <div className="ct-chart" id="chartHours">
+              <Row>
+          <Col md="6">
+           
+                <div className="ct-chart" id="chartActivity">
+                <Bar data={product.Data} />
                 </div>
+              
+                <hr></hr>
+                <div className="stats">
+                
+                 
+                </div>
+             
+           
+          </Col>
+          <Col md="6">
+        
+ 
+          </Col>
+          </Row>
+         </div>
+
+                
+                
               </Card.Body>
               <Card.Footer>
                 <div className="legend">
@@ -277,6 +307,7 @@ function Dashboard() {
                   className="ct-chart ct-perfect-fourth"
                   id="chartPreferences"
                 >
+                  
                   <ChartistGraph
                     data={{
                       labels: ["40%", "20%", "40%"],
