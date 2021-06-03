@@ -39,10 +39,11 @@ async function getByCategoryTilte(req, res) {
    categoryModel.find({title: categoryTitle}).then(category =>{
     if(category) {
     
-         return res.status(200).json({success: true, category})
+         return res.status(200).json({category})
+         
         
     } else {
-        return res.status(400).json({success: false , message: "product not found!"})
+        return res.status(400).json({success: false , message: "category not found!"})
     }
   }
   )}
