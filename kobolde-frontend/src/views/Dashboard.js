@@ -18,7 +18,30 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-
+const legend = {
+  display: true,
+  position: "bottom",
+  labels: {
+    fontColor: "#323130",
+    fontSize: 14
+  }
+};
+const options = {
+  title: {
+    display: true,
+    text: "Chart Title"
+  },
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          suggestedMin: 0,
+          suggestedMax: 100
+        }
+      }
+    ]
+  }
+};
 function Dashboard() {
   const [data, setData] = useState([]);
   const [product, setProduct] = useState([]);
@@ -30,6 +53,7 @@ function Dashboard() {
  let id=[];
  
  let titleproducts=[];
+
  const onSubmit=(data)=>{
    /*
   axios.get(`http://localhost:8000/api/v1/admin/categoryx/${data.title}`).then(res=>{
@@ -100,15 +124,11 @@ function Dashboard() {
         {
           label: "produktnummer",
           data:id,
-          backgroundColor: [
-            "Red",
-            "Blue",
-            "Yellow",
-            "Green",
-            "Purple",
-            "Orange"
-          ],
-          borderColor: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          fill:true,
+          backgroundColor: "rgba(75,192,192,0.2)",
+          borderColor: "#3cb371",
+         
+          
           borderWidth: 1
         }
       ]
@@ -367,9 +387,26 @@ function Dashboard() {
                 <p className="card-category"></p>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartActivity">
-                <Bar data={data.Data} />
-                </div>
+               
+                <Line data={data.Data}  legend={legend} options={options}/>
+               
+              </Card.Body>
+              <Card.Footer>
+               
+              
+              </Card.Footer>
+            </Card>
+          </Col>
+          <Col md="6">
+          <Card>
+              <Card.Header>
+                <Card.Title as="h4">Kategori Raport</Card.Title>
+                <p className="card-category"></p>
+              </Card.Header>
+              <Card.Body>
+              
+                <Bar data={data.Data}  legend={legend} options={options}/>
+               
               </Card.Body>
               <Card.Footer>
                
@@ -380,9 +417,6 @@ function Dashboard() {
                 </div>
               </Card.Footer>
             </Card>
-          </Col>
-          <Col md="6">
-       
       
  
           </Col>

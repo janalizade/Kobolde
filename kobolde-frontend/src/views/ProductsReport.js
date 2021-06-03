@@ -24,7 +24,6 @@ card: {
       maxWidth: 345,
     },
 paper: {
-  marginTop: theme.spacing(8),
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -118,6 +117,7 @@ export default function Products(props) {
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
         <Grid container spacing={2}>
         <Grid item xs={12}>
+        <p className="card-category">Välj kategori för Produkt listen:</p>
         <NativeSelect
                   id="demo-controlled-open-select"
                   open={open}

@@ -43,7 +43,6 @@ const styles = theme => ({
     height: 140,
   },
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     maxWidth: 2200,
