@@ -76,6 +76,30 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 "# ReactContactBookApp" 
 
 
+### NPM Installations
+
+npm install react-hook-form
+
+npm install @material-ui/icons
+
+npm install @material-ui/core 
+
+npm install -g sass    
+
+npm install bootstrap
+
+npm install --save react-chartjs-2 chart.js
+
+npm install blob-util
+
+npm i react-image-file-resizer
+
+npm i semantic-ui-react 
+
+npm install --save sweetalert2
+
+### Server Installations
+
 tail -f  /var/log/syslog
 
 npm i -g service-systemd
@@ -98,26 +122,3 @@ sudo service kobolde-frontend start
 sudo service kobolde-frontend status
 sudo service kobolde-frontend stop
 sudo service-systemd --remove --service kobolde-frontend
-
------------------------------------------------------------
-### NPM Installations
-
-npm install react-hook-form
-
-npm install @material-ui/icons
-
-npm install @material-ui/core 
-
-npm install -g sass    
-
-npm install bootstrap
-
-npm install --save react-chartjs-2 chart.js
-
-npm install blob-util
-
-npm i react-image-file-resizer
-
-npm i semantic-ui-react 
-
-npm install --save sweetalert2
