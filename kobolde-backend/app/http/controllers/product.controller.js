@@ -69,6 +69,8 @@ async function getByCategoryId(req, res) {
        title: req.body.title,
         image: "https://kobolde.ahoora.se:8443/" + req.file.path.replace(/\\/g, "/"),
         serialNo:req.body.serialNo,
+        arbetsGang:req.body.arbetsGang,
+        arbetsTid:req.body.arbetsTid,
      });
      console.log("product",product);
      product.save(err => {
@@ -91,8 +93,8 @@ async function create(req, res) {
       category: category._id,
       title: req.body.title,
       image: "https://kobolde.ahoora.se:8443/" + req.file.path.replace(/\\/g, "/"),
-      quantity:req.body.quantity,
-      price: req.body.price
+      arbetsGang:req.body.arbetsGang,
+      arbetsTid:req.body.arbetsTid,
     });
 
     product.save(err => {

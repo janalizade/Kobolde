@@ -160,6 +160,12 @@ export default function Products(props) {
              <Typography variant="body2" color="textSecondary" component="p">
              Produkt serialNo:{item.serialNo}
              </Typography>
+             <Typography variant="body2" color="textSecondary" component="p">
+             Produkt arebtsTid:{item.arbetsTid}
+             </Typography>
+             <Typography variant="body2" color="textSecondary" component="p">
+             Produkt arbetsGång:{item.arbetsGang}
+             </Typography>
              </CardContent>
              </CardActionArea>
             <CardActions>

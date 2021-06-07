@@ -10,15 +10,15 @@ const ProductSchema = new Schema({
   image: {
     type: String,
   },
-  price: {
+  arbetsTid: {
     type: String,
   },
   
   serialNo:{
     type: String,
   },
-  quantity: {
-     type: Number
+  arbetsGang: {
+     type: String
         },
   
 });

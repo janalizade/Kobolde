@@ -148,6 +148,8 @@ class MyTaskList extends Component {
       formdata.append('title',item.task);
       formdata.append('serialNo',item.serialNo);
       formdata.append('category_id', this.state.categoryId);
+      formdata.append('arbetsGang',item.arbetsGang);
+      formdata.append('arbetsTid',item.arbetsTid);
       const contentType = 'image/png';
       const data = item.image.split('base64,')[1];
       const blob = base64StringToBlob(data, contentType);
@@ -291,7 +293,6 @@ class MyTaskList extends Component {
     const { classes } = this.props;
     // get the task list from the local storage
     let tasklist = JSON.parse(localStorage.getItem("tasklist"));
-    console.log(tasklist);
     // check if task list is empty
     if (tasklist) {
       // sort all the tasks on the basis of status
@@ -444,11 +445,11 @@ class MyTaskList extends Component {
             ))}
             </ NativeSelect>
             </FormControl>
-            <Form  className={classes.container} onSubmit={this.onSubmit}>
+            <Form  className={classes.container} onSubmit={this.onSubmit} novalidate>
             <TextField
               variant="outlined"
               margin="normal"
-              required
+              novalidate
               fullWidth
               type="text"
               name="task"
@@ -459,18 +460,18 @@ class MyTaskList extends Component {
             <TextField
               variant="outlined"
               margin="normal"
-              required
+              novalidate
               fullWidth
               type="text"
               name="serialNo"
               onChange={this.onChange}
               value={this.state.serialNo}
-              placeholder="serialNo..."
+              placeholder="serieNummer..."
               />
               <TextField
               variant="outlined"
               margin="normal"
-              required
+              novalidate
               fullWidth
               type="text"
               name="arbetsGang"
@@ -478,10 +479,10 @@ class MyTaskList extends Component {
               value={this.state.arbetsGang}
               placeholder="arbetsGång..."
               />
-                <TextField
+              <TextField
               variant="outlined"
               margin="normal"
-              required
+              novalidate
               fullWidth
               type="text"
               name="arbetsTid"
