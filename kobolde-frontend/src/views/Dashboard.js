@@ -72,10 +72,7 @@ function Dashboard() {
       title.push(element.title);
       arbetsTid.push(element.arbetsTid);
       arbetsGang.push(element.arbetsGang);
-      console.log('arbetsTid----',arbetsTid);
-      console.log('arbetsGang----',arbetsGang);
-
-    })
+      })
      setProductItem(products); 
      console.log('products',products);
   
@@ -115,6 +112,7 @@ function Dashboard() {
  React.useEffect(()=>{
   arbetsGang=[];
   arbetsTid=[];
+  id=[];
   axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/product').then(res=>{
     const products=res.data;
     
@@ -308,10 +306,10 @@ function Dashboard() {
                     options={{
                       low: 0,
                       high: 800,
-                      showArea: true,
+                      showArea: false,
                       height: "245px",
                       axisX: {
-                        showGrid: true,
+                        showGrid: false,
                       },
                       lineSmooth: true,
                       showLine: true,

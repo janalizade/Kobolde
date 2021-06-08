@@ -10,12 +10,19 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import EditIcon from '@material-ui/icons/Edit';
+import { Header, Form, Input, Icon } from "semantic-ui-react";
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import {
+   Modal
+ } from "react-bootstrap";
+import {
+    TextField,
     Button,
     Typography,
     Grid,
   } from "@material-ui/core";
-  import { useForm } from "react-hook-form";
+  import { useForm , Controller} from "react-hook-form";
   import axios from 'axios';
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -49,8 +56,10 @@ submit: {
   margin: theme.spacing(3, 0, 2),
 },
 }));
+
 export default function Products(props) {
     const classes = useStyles();
+    const [showModal, setShowModal] = React.useState(false);
     const { control, handleSubmit, errors, formState, reset } = useForm({
       mode: "onChange",
     });
@@ -59,6 +68,7 @@ export default function Products(props) {
       e.preventDefault();
       setOpen(!open);
     };
+    
    const[categoryId,setCategoryId]=React.useState([]);
    const [categoryItem,setCategoryItem]=React.useState([]);
    const[productItem,setProductItem]=React.useState([]);
@@ -83,6 +93,7 @@ export default function Products(props) {
           })
       })
     }
+    
     const searchrow=()=>{  
        console.log("categoryId",categoryId);
       }  
@@ -172,11 +183,112 @@ export default function Products(props) {
             <IconButton aria-label="delete" className={classes.margin}  color="secondary">
             <TrashIcon fontSize="small" onClick={(e)=>deleteRow(item._id, e)}/>
             </IconButton>
-           <span style={{ paddingRight: 10 }}>Delete</span>      
+            <span style={{ paddingRight: 10 }}>Delete</span>   
+            <IconButton aria-label="delete" className={classes.margin}  color="secondary">
+            <EditIcon fontSize="small" onClick={()=>setShowModal(true)}/>
+            </IconButton>
+            <span style={{ paddingRight: 10 }}>Edit</span>      
          </CardActions>
          </Card>
-             ))}
+          ))}
+        <Modal
+          className="modal-primary"
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
+          <Modal.Header className="justify-content-center">
+            <div className="modal-profile">
+              <i className="nc-icon nc-badge"></i>
+            </div>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+          
+          <div className="modal-footer">
+          <Form   onSubmit={onSubmit} novalidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              novalidate
+              fullWidth
+              type="text"
+              name="task"
+            
+              placeholder="motor..."
+              />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              novalidate
+              fullWidth
+              type="text"
+              name="serialNo"
+              
+              placeholder="serieNummer..."
+              />
+              <TextField
+              variant="outlined"
+              margin="normal"
+              novalidate
+              fullWidth
+              type="text"
+              name="arbetsGang"
+              
+              placeholder="arbetsGång..."
+              />
+              <TextField
+              variant="outlined"
+              margin="normal"
+              novalidate
+              fullWidth
+              type="text"
+              name="arbetsTid"
+             
+              placeholder="arbetsTid..."
+              />
+              <input accept="image/*" className={classes.input} name="file" id="icon-button-file" type="file" />
+              <label htmlFor="icon-button-file">
+              <IconButton color="primary" aria-label="upload picture" component="span">
+              <PhotoCamera />
+              </IconButton>
+              </label>
+                <Button
+                 variant="outlined"
+                 margin="normal"
+                 fullWidth
+                 type="submit"
+                 fullWidth
+                 variant="contained"
+                 color="primary"
+                >
+                redigera Produkt
+                </Button>             
+                    
+            </Form>
+            
+          </div>
+          </Modal.Body>
+          <div className="modal-footer">
+            <Button
+              className="btn-simple"
+              type="button"
+              variant="link"
+              onClick={() => setShowModal(false)}
+            >
+              Back
+            </Button>
+            <Button
+              className="btn-simple"
+              type="button"
+              variant="link"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </Modal>
+        {/* End Modal */}
    </Container>
+   
   )
 }
 

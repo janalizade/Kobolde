@@ -46,8 +46,7 @@ function Notifications() {
       message: (
         <div>
           <div>
-            Welcome to <b>Light Bootstrap Dashboard React</b> - a beautiful
-            freebie for every web developer.
+            Welcome to <b>Kobolde Company</b> 
           </div>
         </div>
       ),

@@ -67,6 +67,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 export default function Category(props) {
   const classes = useStyles();
+  const [showModal, setShowModal] = React.useState(false);
    const { control, handleSubmit, errors, formState, reset } = useForm({
     mode: "onChange",
   });
@@ -88,7 +89,6 @@ export default function Category(props) {
           
       axios.post('https://kobolde.ahoora.se:8443/api/v1/admin/category', userObject)
       .then((res) => {
-        console.log(res.data)
         axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
         const categories=res.data;
        setCategoryItem(categories);
@@ -101,9 +101,7 @@ function deleteRow(id, e){
   setCategories(''); 
     axios.delete(`https://kobolde.ahoora.se:8443/api/v1/admin/category/${id}`)  
       .then(res => {  
-       console.log(res);  
-       console.log(res.data);  
-       axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
+      axios.get('https://kobolde.ahoora.se:8443/api/v1/admin/category').then(res=>{
       const categories=res.data;
      setCategoryItem(categories);
      })
@@ -171,6 +169,7 @@ function deleteRow(id, e){
          </TableContainer>
         </Grid>  
       </div>
+     
    </Container>
   )
 }
