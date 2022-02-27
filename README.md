@@ -17,9 +17,7 @@ npm install react-hook-form
 npm install @material-ui/icons
 
 npm install @material-ui/core 
-
-npm install -g sass    
-
+  
 npm install bootstrap
 
 npm install --save react-chartjs-2 chart.js

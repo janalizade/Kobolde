@@ -156,7 +156,7 @@ class MyTaskList extends Component {
         formdata.append('image',blob);
          var config = {
           method: 'post',
-          url: 'https://kobolde.ahoora.se:8443/api/v1/admin/productx',
+          url: 'https://localhost:8080/api/v1/admin/productx',
           headers: { 
             'Content-Type': 'application/x-www-form-urlencoded'
           },
